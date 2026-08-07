@@ -17,6 +17,30 @@ A static frontend that lets you run SQL queries against your `database.sql` dire
 - `app.py`: Python runtime logic, SQL loading, query execution, and result rendering.
 - `database.sql`: your SQL script (create this file with your schema/data).
 
+## Python Project (uv)
+
+This repository now uses `uv` with:
+
+- `pyproject.toml`
+- `uv.lock`
+
+Install/sync the environment:
+
+```bash
+uv sync
+```
+
+Run linting:
+
+```bash
+uv run ruff check .
+```
+
+Dependency notes:
+
+- Runtime dependencies in `pyproject.toml` are intentionally empty because the app runs in-browser via PyScript/Pyodide on GitHub Pages.
+- A dev dependency (`ruff`) is included for local code quality checks.
+
 ## Use Locally
 
 Because browsers block local `fetch` for some files, run a tiny static server:

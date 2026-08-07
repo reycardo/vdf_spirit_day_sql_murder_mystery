@@ -1,11 +1,12 @@
 import asyncio
 import html
-import sqlite3
+import importlib
 import time
 
 from js import document
 from pyodide.ffi import create_proxy
 from pyodide.http import pyfetch
+from pyodide_js import loadPackage
 
 status_el = document.getElementById("status")
 query_input = document.getElementById("query-input")
@@ -18,6 +19,7 @@ results_wrap_el = document.getElementById("results-wrap")
 
 conn = None
 loaded_script = ""
+sqlite3_module = None
 
 
 def set_status(message: str, kind: str = "") -> None:
@@ -28,10 +30,13 @@ def set_status(message: str, kind: str = "") -> None:
 def create_db_from_sql(script_text: str) -> None:
     global conn, loaded_script
 
+    if sqlite3_module is None:
+        raise RuntimeError("sqlite3 package is not loaded yet.")
+
     if conn is not None:
         conn.close()
 
-    conn = sqlite3.connect(":memory:")
+    conn = sqlite3_module.connect(":memory:")
     conn.executescript(script_text)
     loaded_script = script_text
 
@@ -77,7 +82,7 @@ async def load_default_script() -> None:
 
         script_text = await response.string()
         create_db_from_sql(script_text)
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         set_status(str(exc), "error")
 
 
@@ -91,7 +96,7 @@ async def handle_file_upload(event) -> None:
         script_text = await sql_file.text()
         create_db_from_sql(str(script_text))
         set_status(f"Loaded SQL script from {sql_file.name}.", "ok")
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         set_status(f"Failed to load SQL file: {exc}", "error")
 
 
@@ -104,7 +109,7 @@ def reset_db(_event=None) -> None:
         set_status("Database reset to initial loaded SQL script.", "ok")
         results_meta_el.textContent = "Database reset. Run a query."
         results_wrap_el.innerHTML = ""
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         set_status(f"Could not reset database: {exc}", "error")
 
 
@@ -141,7 +146,7 @@ def run_query(_event=None) -> None:
             results_wrap_el.innerHTML = ""
 
         set_status("Query completed successfully.", "ok")
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         set_status(f"Query failed: {exc}", "error")
 
 
@@ -153,15 +158,36 @@ def on_file_change(event) -> None:
     asyncio.create_task(handle_file_upload(event))
 
 
+async def ensure_sqlite3_loaded() -> None:
+    global sqlite3_module
+
+    if sqlite3_module is not None:
+        return
+
+    set_status("Loading sqlite3 runtime package...", "")
+    await loadPackage("sqlite3")
+    sqlite3_module = importlib.import_module("sqlite3")
+
+
+async def bootstrap() -> None:
+    try:
+        load_default_btn.disabled = True
+        await ensure_sqlite3_loaded()
+
+        load_default_btn.addEventListener("click", load_default_proxy)
+        run_query_btn.addEventListener("click", run_query_proxy)
+        reset_db_btn.addEventListener("click", reset_db_proxy)
+        file_input.addEventListener("change", file_change_proxy)
+
+        load_default_btn.disabled = False
+        set_status("Python runtime is ready. Load a database script to begin.", "ok")
+    except Exception as exc:  # noqa: BLE001
+        set_status(f"Startup failed: {exc}", "error")
+
+
 load_default_proxy = create_proxy(on_load_default_click)
 run_query_proxy = create_proxy(run_query)
 reset_db_proxy = create_proxy(reset_db)
 file_change_proxy = create_proxy(on_file_change)
 
-load_default_btn.disabled = False
-load_default_btn.addEventListener("click", load_default_proxy)
-run_query_btn.addEventListener("click", run_query_proxy)
-reset_db_btn.addEventListener("click", reset_db_proxy)
-file_input.addEventListener("change", file_change_proxy)
-
-set_status("Python runtime is ready. Load a database script to begin.", "ok")
+asyncio.create_task(bootstrap())
