@@ -1,12 +1,11 @@
 import asyncio
 import html
-import importlib
+import sqlite3
 import time
 
 from js import document
 from pyodide.ffi import create_proxy
 from pyodide.http import pyfetch
-from pyodide_js import loadPackage
 
 status_el = document.getElementById("status")
 query_input = document.getElementById("query-input")
@@ -19,7 +18,6 @@ results_wrap_el = document.getElementById("results-wrap")
 
 conn = None
 loaded_script = ""
-sqlite3_module = None
 
 
 def set_status(message: str, kind: str = "") -> None:
@@ -30,13 +28,10 @@ def set_status(message: str, kind: str = "") -> None:
 def create_db_from_sql(script_text: str) -> None:
     global conn, loaded_script
 
-    if sqlite3_module is None:
-        raise RuntimeError("sqlite3 package is not loaded yet.")
-
     if conn is not None:
         conn.close()
 
-    conn = sqlite3_module.connect(":memory:")
+    conn = sqlite3.connect(":memory:")
     conn.executescript(script_text)
     loaded_script = script_text
 
@@ -158,21 +153,9 @@ def on_file_change(event) -> None:
     asyncio.create_task(handle_file_upload(event))
 
 
-async def ensure_sqlite3_loaded() -> None:
-    global sqlite3_module
-
-    if sqlite3_module is not None:
-        return
-
-    set_status("Loading sqlite3 runtime package...", "")
-    await loadPackage("sqlite3")
-    sqlite3_module = importlib.import_module("sqlite3")
-
-
 async def bootstrap() -> None:
     try:
         load_default_btn.disabled = True
-        await ensure_sqlite3_loaded()
 
         load_default_btn.addEventListener("click", load_default_proxy)
         run_query_btn.addEventListener("click", run_query_proxy)
