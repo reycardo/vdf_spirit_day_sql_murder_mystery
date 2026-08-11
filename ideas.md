@@ -1,0 +1,11 @@
+- kid died in game
+- check logs of death by username
+- (time, username dmged, weapon used, damage taken)
+- will show that xCalibur died from a rare sword
+- will have to find who had the rare sword at time of death
+- have an image for weapon rarity (common, uncommon, rare, legendary)
+- have an image for weapon types (sword, axe, dagger, mace)
+- have an image for weapon effects (burning, poisoned, electrified, rusted)
+- killer traded weapon to easily_Gullible123 after time of death
+- 4 monsters available, each monster deals damage differently, they have to check 
+- damage logs reveal that 
