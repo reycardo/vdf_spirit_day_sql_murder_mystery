@@ -10,6 +10,7 @@ from pyodide.http import pyfetch
 status_el = document.getElementById("status")
 query_input = document.getElementById("query-input")
 run_query_btn = document.getElementById("run-query")
+list_tables_btn = document.getElementById("list-tables")
 load_default_btn = document.getElementById("load-default")
 reset_db_btn = document.getElementById("reset-db")
 file_input = document.getElementById("file-input")
@@ -38,6 +39,7 @@ def create_db_from_sql(script_text: str) -> None:
     loaded_script = script_text
 
     run_query_btn.disabled = False
+    list_tables_btn.disabled = False
     reset_db_btn.disabled = False
     set_status("Database loaded. You can run queries now.", "ok")
 
@@ -205,6 +207,34 @@ def run_query(_event=None) -> None:
         set_status(f"Query failed: {exc}", "error")
 
 
+def list_tables(_event=None) -> None:
+    if conn is None:
+        set_status("Load a database script first.", "error")
+        return
+
+    try:
+        started_at = time.perf_counter()
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            SELECT name
+            FROM sqlite_master
+            WHERE type='table' AND name NOT LIKE 'sqlite_%'
+            ORDER BY name;
+            """
+        )
+
+        rows = cursor.fetchall()
+        elapsed_ms = max(1, round((time.perf_counter() - started_at) * 1000))
+        render_table(["table_name"], rows)
+        results_meta_el.textContent = (
+            f"Table list fetched in {elapsed_ms} ms. {len(rows)} table(s) found."
+        )
+        set_status("Table list loaded.", "ok")
+    except Exception as exc:  # noqa: BLE001
+        set_status(f"Could not list tables: {exc}", "error")
+
+
 def on_load_default_click(_event=None) -> None:
     asyncio.create_task(load_default_script())
 
@@ -216,8 +246,10 @@ def on_file_change(event) -> None:
 async def bootstrap() -> None:
     try:
         load_default_btn.disabled = True
+        list_tables_btn.disabled = True
 
         load_default_btn.addEventListener("click", load_default_proxy)
+        list_tables_btn.addEventListener("click", list_tables_proxy)
         run_query_btn.addEventListener("click", run_query_proxy)
         reset_db_btn.addEventListener("click", reset_db_proxy)
         file_input.addEventListener("change", file_change_proxy)
@@ -229,6 +261,7 @@ async def bootstrap() -> None:
 
 
 load_default_proxy = create_proxy(on_load_default_click)
+list_tables_proxy = create_proxy(list_tables)
 run_query_proxy = create_proxy(run_query)
 reset_db_proxy = create_proxy(reset_db)
 file_change_proxy = create_proxy(on_file_change)

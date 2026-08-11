@@ -166,6 +166,12 @@ body {
   gap: 0.8rem;
 }
 
+.editor-actions {
+  display: flex;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
 h2 {
   margin: 0;
   font-size: 1.05rem;
@@ -337,6 +343,14 @@ code {
   .editor-head {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .editor-actions {
+    width: 100%;
+  }
+
+  .editor-actions .btn {
+    flex: 1;
   }
 
   .clues-head {

@@ -40,7 +40,10 @@
       <section class="panel editor-panel">
         <div class="editor-head">
           <h2>SQL Editor</h2>
-          <button id="run-query" class="btn btn-primary" disabled>Run Query</button>
+          <div class="editor-actions">
+            <button id="list-tables" class="btn btn-secondary" disabled>List Tables</button>
+            <button id="run-query" class="btn btn-primary" disabled>Run Query</button>
+          </div>
         </div>
         <textarea id="query-input" spellcheck="false" aria-label="SQL query input">
 SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;
