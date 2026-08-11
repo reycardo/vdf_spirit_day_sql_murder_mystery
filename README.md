@@ -1,12 +1,12 @@
 # SQL Mystery GitHub Page
 
-A static frontend that lets you run SQL queries against your `database.sql` directly in the browser.
+A static frontend that lets you run SQL queries against your `sql/database.sql` directly in the browser.
 
 ## How It Works
 
 - Uses [PyScript](https://pyscript.net/) to run Python in the browser.
 - Uses Python's `sqlite3` module (inside Pyodide/WebAssembly).
-- Loads `database.sql` from the repository root.
+- Loads `sql/database.sql` from the `sql` folder.
 - Builds an in-memory SQLite database at runtime.
 - Executes any SQL query you type in the editor.
 
@@ -14,8 +14,21 @@ A static frontend that lets you run SQL queries against your `database.sql` dire
 
 - `index.html`: page structure and script imports.
 - `style.css`: visual design and responsive layout.
-- `app.py`: Python runtime logic, SQL loading, query execution, and result rendering.
-- `database.sql`: your SQL script (create this file with your schema/data).
+- `app.py`: Python runtime logic, SQL loading, include resolution, query execution, and result rendering.
+- `sql/database.sql`: main setup/orchestration SQL file.
+- `sql/tables/*.sql`: one file per table (schema + seed data).
+
+## SQL File Organization
+
+Use `sql/database.sql` as your entry point and include table files with:
+
+```sql
+-- @include tables/suspects.sql
+-- @include tables/clues.sql
+-- @include tables/damage_logs.sql
+```
+
+The app resolves these includes in order before executing SQL, so you can keep each table in its own file while preserving a single setup flow.
 
 ## Python Project (uv)
 

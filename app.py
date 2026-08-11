@@ -18,6 +18,8 @@ results_wrap_el = document.getElementById("results-wrap")
 
 conn = None
 loaded_script = ""
+DEFAULT_SQL_PATH = "sql/database.sql"
+INCLUDE_PREFIX = "-- @include"
 
 
 def set_status(message: str, kind: str = "") -> None:
@@ -38,6 +40,72 @@ def create_db_from_sql(script_text: str) -> None:
     run_query_btn.disabled = False
     reset_db_btn.disabled = False
     set_status("Database loaded. You can run queries now.", "ok")
+
+
+def normalize_sql_path(path: str) -> str:
+    parts = []
+    for chunk in path.replace("\\", "/").split("/"):
+        if chunk in ("", "."):
+            continue
+        if chunk == "..":
+            if parts:
+                parts.pop()
+            continue
+        parts.append(chunk)
+    return "/".join(parts)
+
+
+def resolve_include_path(parent_path: str, include_path: str) -> str:
+    if include_path.startswith("/"):
+        return normalize_sql_path(include_path)
+
+    if "/" not in parent_path:
+        return normalize_sql_path(include_path)
+
+    base_dir = parent_path.rsplit("/", 1)[0]
+    return normalize_sql_path(f"{base_dir}/{include_path}")
+
+
+async def fetch_sql_file(sql_path: str) -> str:
+    response = await pyfetch(f"{sql_path}?t={int(time.time())}")
+
+    if not response.ok:
+        raise RuntimeError(
+            f"{sql_path} was not found (HTTP {response.status}). Check your SQL file structure."
+        )
+
+    return str(await response.string())
+
+
+async def load_sql_with_includes(entry_path: str) -> str:
+    async def expand(sql_path: str, include_stack: set[str]) -> str:
+        if sql_path in include_stack:
+            chain = " -> ".join(list(include_stack) + [sql_path])
+            raise RuntimeError(f"Circular SQL include detected: {chain}")
+
+        include_stack.add(sql_path)
+        source = await fetch_sql_file(sql_path)
+        expanded_lines = []
+
+        for line in source.splitlines():
+            stripped = line.strip()
+            if stripped.startswith(INCLUDE_PREFIX):
+                child_include_path = stripped[len(INCLUDE_PREFIX) :].strip()
+                if not child_include_path:
+                    continue
+
+                child_sql_path = resolve_include_path(sql_path, child_include_path)
+                expanded_lines.append(f"-- begin include {child_sql_path}")
+                expanded_lines.append(await expand(child_sql_path, include_stack))
+                expanded_lines.append(f"-- end include {child_sql_path}")
+                continue
+
+            expanded_lines.append(line)
+
+        include_stack.remove(sql_path)
+        return "\n".join(expanded_lines)
+
+    return await expand(entry_path, set())
 
 
 def render_table(columns: list[str], rows: list[tuple]) -> None:
@@ -66,16 +134,8 @@ def render_table(columns: list[str], rows: list[tuple]) -> None:
 
 async def load_default_script() -> None:
     try:
-        set_status("Loading database.sql...", "")
-        # Cache-bust to always fetch latest script on refresh/deploy propagation.
-        response = await pyfetch(f"database.sql?t={int(time.time())}")
-
-        if not response.ok:
-            raise RuntimeError(
-                f"database.sql was not found (HTTP {response.status}). Add it to the repository root."
-            )
-
-        script_text = await response.string()
+        set_status(f"Loading {DEFAULT_SQL_PATH}...", "")
+        script_text = await load_sql_with_includes(DEFAULT_SQL_PATH)
         create_db_from_sql(script_text)
     except Exception as exc:  # noqa: BLE001
         set_status(str(exc), "error")

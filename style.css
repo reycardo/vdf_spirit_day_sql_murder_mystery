@@ -197,6 +197,84 @@ h2 {
   overflow-x: auto;
 }
 
+.clues-panel {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.clues-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.7rem;
+}
+
+.clues-counter {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.clues-status {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.93rem;
+}
+
+.clues-status.error {
+  color: var(--warning);
+}
+
+.clue-figure {
+  margin: 0;
+  border: 1px solid var(--panel-border);
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.clue-image {
+  width: 100%;
+  max-height: 460px;
+  display: block;
+  object-fit: contain;
+  background:
+    linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(30, 58, 138, 0.94)),
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.06),
+      rgba(255, 255, 255, 0.06) 10px,
+      transparent 10px,
+      transparent 20px
+    );
+}
+
+.clue-image.is-empty {
+  min-height: 220px;
+}
+
+.clue-caption {
+  padding: 0.85rem 0.95rem;
+}
+
+.clue-caption h3 {
+  margin: 0;
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: 1rem;
+}
+
+.clue-caption p {
+  margin: 0.42rem 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.clues-controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.65rem;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -259,5 +337,22 @@ code {
   .editor-head {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .clues-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .clue-image {
+    max-height: 320px;
+  }
+
+  .clues-controls {
+    justify-content: stretch;
+  }
+
+  .clues-controls .btn {
+    flex: 1;
   }
 }

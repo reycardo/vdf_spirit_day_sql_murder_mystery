@@ -20,7 +20,7 @@
     <main class="app-shell">
       <header class="hero">
         <p class="kicker">GitHub Pages SQL Playground</p>
-        <h1>Query Your <span>database.sql</span> in the Browser</h1>
+        <h1>Query Your <span>sql/database.sql</span> in the Browser</h1>
         <p class="subtitle">
           This page loads your SQL script into an in-memory SQLite engine (no backend)
           and lets you run custom queries instantly.
@@ -29,7 +29,7 @@
 
       <section class="panel controls-panel">
         <div class="controls-row">
-          <button id="load-default" class="btn btn-primary">Load database.sql</button>
+          <button id="load-default" class="btn btn-primary">Load sql/database.sql</button>
           <label class="btn btn-secondary file-label" for="file-input">Load .sql file</label>
           <input id="file-input" type="file" accept=".sql,text/sql" />
           <button id="reset-db" class="btn btn-ghost" disabled>Reset DB</button>
@@ -52,11 +52,31 @@ SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;
         <div id="results-meta" class="results-meta">No query executed yet.</div>
         <div id="results-wrap" class="results-wrap"></div>
       </section>
+
+      <section class="panel clues-panel" aria-label="Clues gallery">
+        <div class="clues-head">
+          <h2>Clues Folder Viewer</h2>
+          <p id="clues-counter" class="clues-counter">0 / 0</p>
+        </div>
+        <p id="clues-status" class="clues-status">Initializing clues...</p>
+        <figure class="clue-figure">
+          <img id="clues-image" class="clue-image is-empty" alt="No clue image loaded." />
+          <figcaption class="clue-caption">
+            <h3 id="clues-title">No clues available</h3>
+            <p id="clues-description">Add images to clues/ and list them in clues/manifest.json.</p>
+          </figcaption>
+        </figure>
+        <div class="clues-controls">
+          <button id="prev-clue" class="btn btn-ghost" disabled>Previous clue</button>
+          <button id="next-clue" class="btn btn-primary" disabled>Next clue</button>
+        </div>
+      </section>
     </main>
 
     <py-config>
       packages = ["sqlite3"]
     </py-config>
+    <script type="module" src="clues.js"></script>
     <script type="module" src="https://pyscript.net/releases/2025.5.1/core.js"></script>
     <script type="py" src="app.py"></script>
   </body>
