@@ -3,12 +3,14 @@ DROP TABLE IF EXISTS beastiary;
 CREATE TABLE beastiary (
   id INTEGER PRIMARY KEY,
   monster_name TEXT NOT NULL UNIQUE,
-  weapon_equiped TEXT NOT NULL,
+  damage_min INTEGER NOT NULL,
+  damage_max INTEGER NOT NULL,
+  nocturnal BOOLEAN NOT NULL CHECK (nocturnal IN (0, 1)),
   place TEXT NOT NULL
 );
 
-INSERT INTO beastiary (id, monster_name, weapon_equiped, place) VALUES
-  (1, 'Ashfang Whelp', 'Burning Claws', 'Ember Market'),
-  (2, 'Boglurker', 'Rusted Trident', 'Moonlit Docks'),
-  (3, 'Stormcoil Serpent', 'Electrified Fangs', 'Shattered Arena'),
-  (4, 'Nightmaw', 'Poisoned Talons', 'Whisper Grove');
+INSERT INTO beastiary (id, monster_name, damage_min, damage_max, nocturnal, place) VALUES
+  (1, 'Ashfang Whelp', 1, 2, 0, 'Ember Market'),
+  (2, 'Boglurker', 4, 6, 1, 'Moonlit Docks'),
+  (3, 'Stormcoil Serpent', 10, 11, 0, 'Shattered Arena'),
+  (4, 'Nightmaw', 5, 15, 1, 'Whisper Grove');

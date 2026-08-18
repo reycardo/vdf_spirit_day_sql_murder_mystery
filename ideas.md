@@ -2,6 +2,11 @@
 - check logs of death by username
 - (time, username dmged, damage taken)
 - will show that xCalibur died from a 34 damage hit
+
+select * from damage_logs
+where username = "xCalibur"
+order by damage_timestamp desc;
+
 - now they will have to query for what can hit for 34 damage
 - they will know that he was on Whisper Grove + arena from tolls
 - from the hits that he also took they will know that he was on Whisper Grove before dying
