@@ -25,4 +25,4 @@ INSERT INTO beastiary (id, monster_name, damage_min, damage_max, nocturnal, plac
   (13, 'Blazebloom Imp', 0, 5, 0, 'Ember Market'),
   (14, 'Harbor Wraith', 8, 17, 1, 'Moonlit Docks'),
   (15, 'Pitcoil Hound', 11, 20, 0, 'Shattered Arena'),
-  (16, 'Thornveil Owlbear', 5, 18, 1, 'Whisper Grove');
+  (16, 'Thornveil Bear', 5, 18, 0, 'Whisper Grove');

@@ -16,11 +16,39 @@ SELECT DISTINCT
   place
 FROM beastiary
 WHERE damage_min <= 11
-  AND damage_max >= 17
+  AND damage_max >= 17  
 ORDER BY monster_name;
 
+- tell user that nocturnal monsters only appear at night
+
+SELECT DISTINCT
+b.monster_name,
+b.damage_min,
+b.damage_max,
+b.place,
+b.nocturnal,
+p.sunset,
+p.sunrise,
+CASE
+WHEN b.nocturnal = 1 AND '19:00:00' >= p.sunset THEN 1
+WHEN b.nocturnal = 1 AND '19:00:00' < p.sunset THEN 0
+WHEN b.nocturnal = 0 AND '19:00:00' < p.sunset THEN 1
+WHEN b.nocturnal = 0 AND '19:00:00' >= p.sunset THEN 0
+END AS spawned_at_19
+FROM beastiary AS b
+JOIN places AS p
+ON b.place = p.place_name
+WHERE b.damage_min <= 11
+AND b.damage_max >= 17
+ORDER BY b.monster_name;
+
+- user finds that only place that could have monster that hit for that damage at 19h is Whisper Grove
+
+
 - now they will have to query for what can hit for 34 damage
-- they will know that he was on Whisper Grove + arena from tolls
+
+
+- they will know that he was on Whisper Grove
 - from the hits that he also took they will know that he was on Whisper Grove before dying
 
 username	damage_timestamp	damage_taken
