@@ -1,11 +1,23 @@
 - kid died in game
-- check logs of death by username
-- (time, username dmged, damage taken)
-- will show that xCalibur died from a 34 damage hit
+- check damage_logs by username
 
 select * from damage_logs
 where username = "xCalibur"
 order by damage_timestamp desc;
+
+- will show that xCalibur died from a 34 damage hit
+- will also show that after 19h he got hits that range from 11-17
+- will also show that after 18h he got hits that range from 5-8
+
+SELECT DISTINCT
+  monster_name,
+  damage_min,
+  damage_max,
+  place
+FROM beastiary
+WHERE damage_min <= 11
+  AND damage_max >= 17
+ORDER BY monster_name;
 
 - now they will have to query for what can hit for 34 damage
 - they will know that he was on Whisper Grove + arena from tolls
@@ -35,4 +47,4 @@ xCalibur	2026-06-12 19:07:41	34
 - damage logs reveal that 
 
 - have an image for how damage works = class + base weapon damage + effect
-- have an image for how travelling works = takes 1h to move from one location to the next
+- have an image for how travelling works = takes 1h to be out of combat to move from one location to the next
