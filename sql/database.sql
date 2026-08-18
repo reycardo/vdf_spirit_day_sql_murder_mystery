@@ -5,3 +5,4 @@
 -- @include tables/clues.sql
 -- @include tables/damage_logs.sql
 -- @include tables/trades.sql
+-- @include tables/player_overview.sql
