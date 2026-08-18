@@ -47,12 +47,24 @@ ORDER BY b.monster_name;
 
 - now they will have to query for what can hit for 34 damage
 
+SELECT
+c.class_name,
+w.weapon_name,
+we.weapon_effect,
+(w.damage + we.damage_increment + c.damage_min) AS total_min_damage,
+(w.damage + we.damage_increment + c.damage_max) AS total_max_damage
+FROM classes AS c
+CROSS JOIN weapons AS w
+CROSS JOIN weapon_effects AS we
+WHERE 34 BETWEEN
+(w.damage + we.damage_increment + c.damage_min)
+AND (w.damage + we.damage_increment + c.damage_max)
+ORDER BY c.class_name, w.weapon_name, we.weapon_effect;
 
-- they will know that he was on Whisper Grove
-- from the hits that he also took they will know that he was on Whisper Grove before dying
 
-username	damage_timestamp	damage_taken
-xCalibur	2026-06-12 19:07:41	34
+TODO: find something to thin out what class the killer was using
+TODO: find something to thin out what weapon the killer was using
+
 
 - will have to find what weapon was used at time of death
 - initial image will say it was a burning weapon (possible weapons that would kill would be a non burning weapon and the correct burning weapon)
