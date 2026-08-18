@@ -10,3 +10,4 @@
 -- @include tables/beastiary.sql
 -- @include tables/weapons.sql
 -- @include tables/weapon_effects.sql
+-- @include tables/classes.sql

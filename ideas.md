@@ -29,9 +29,10 @@ xCalibur	2026-06-12 19:07:41	34
 - Then we need to check from there, what mages also traded the legendary dagger to the easily gullible that currently has the dagger
 
 - have a table with tolls (username, entered, place)
-- have an image for weapon rarity (common, uncommon, rare, legendary)
-- have an image for weapon types (sword, axe, dagger, mace)
-- have an image for weapon effects (burning, poisoned, electrified, rusted)
+
 - killer traded weapon to easily_Gullible123 after time of death
 - 4 monsters available, each monster deals damage differently, they have to check 
 - damage logs reveal that 
+
+- have an image for how damage works = class + base weapon damage + effect
+- have an image for how travelling works = takes 1h to move from one location to the next
