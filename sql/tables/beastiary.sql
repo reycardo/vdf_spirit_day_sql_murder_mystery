@@ -13,7 +13,7 @@ INSERT INTO beastiary (id, monster_name, damage_min, damage_max, nocturnal, plac
   (1, 'Ashfang Whelp', 1, 2, 0, 'Ember Market'),
   (2, 'Boglurker', 4, 6, 1, 'Moonlit Docks'),
   (3, 'Stormcoil Serpent', 10, 11, 0, 'Shattered Arena'),
-  (4, 'Nightmaw', 5, 15, 1, 'Whisper Grove'),
+  (4, 'Nightmaw', 5, 19, 1, 'Whisper Grove'),
   (5, 'Cinder Rat', 0, 3, 0, 'Ember Market'),
   (6, 'Dockshade Eel', 2, 8, 1, 'Moonlit Docks'),
   (7, 'Arena Howler', 7, 13, 0, 'Shattered Arena'),
