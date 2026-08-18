@@ -12,5 +12,6 @@ INSERT INTO tolls (username, day, place) VALUES
   ('ArthasMain', '2026-06-12', 'Ember Market'),
   ('MoonPriest', '2026-06-12', 'Moonlit Docks'),
   ('xCalibur', '2026-06-12', 'Shattered Arena'),
+  ('xCalibur', '2026-06-12', 'Whisper Grove'),  
   ('RuneTank', '2026-06-12', 'Iron Gate'),
   ('EluneKid', '2026-06-12', 'Whisper Grove');
