@@ -7,7 +7,7 @@ CREATE TABLE beastiary (
 );
 
 INSERT INTO beastiary (monster_name, weapon_equiped, place) VALUES
-  ('Ashfang Whelp', 'Burning Claws', 'Zone X - Ember Market'),
-  ('Boglurker', 'Rusted Trident', 'Zone Y - Moonlit Docks'),
-  ('Stormcoil Serpent', 'Electrified Fangs', 'Zone Z - Shattered Arena'),
-  ('Nightmaw', 'Poisoned Talons', 'Zone Y - Whisper Grove');
+  ('Ashfang Whelp', 'Burning Claws', 'Ember Market'),
+  ('Boglurker', 'Rusted Trident', 'Moonlit Docks'),
+  ('Stormcoil Serpent', 'Electrified Fangs', 'Shattered Arena');
+  ('Nightmaw', 'Poisoned Talons', 'Whisper Grove');
