@@ -203,10 +203,6 @@ body {
   align-items: center;
 }
 
-#file-input {
-  display: none;
-}
-
 .btn {
   border: 0;
   border-radius: 12px;

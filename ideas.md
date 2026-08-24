@@ -93,6 +93,14 @@ TODO: find something to thin out what class the killer was using
 
 The weapon was a poisoned dagger
 
+possible suspects: 
+
+select * from 
+zone_presence
+where entered_at <= "19:07"
+and (left_at >= "19:07" or left_at == "NULL")
+and place = "Whisper Grove"
+
 - knowing that the player was a mage 
 
 SELECT * FROM player_overview b

@@ -4,11 +4,11 @@ CREATE TABLE player_overview (
   id INTEGER PRIMARY KEY,
   username TEXT NOT NULL UNIQUE,
   class TEXT NOT NULL CHECK (class IN ('warrior', 'mage', 'rogue', 'bard')),
-  current_equiped_weapon TEXT NOT NULL CHECK (current_equiped_weapon IN ('sword', 'axe', 'dagger', 'staff')),
-  weapon_effect TEXT NOT NULL CHECK (weapon_effect IN ('burning', 'poisoned', 'electrified', 'rusted'))
+  current_equipped_weapon TEXT NOT NULL CHECK (current_equipped_weapon IN ('sword', 'axe', 'dagger', 'staff')),
+  current_weapon_effect TEXT NOT NULL CHECK (current_weapon_effect IN ('burning', 'poisoned', 'electrified', 'rusted'))
 );
 
-INSERT INTO player_overview (id, username, class, current_equiped_weapon, weapon_effect) VALUES
+INSERT INTO player_overview (id, username, class, current_equipped_weapon, current_weapon_effect) VALUES
   (1, 'ArthasMain', 'warrior', 'sword', 'electrified'),
   (2, 'MoonPriest', 'bard', 'dagger', 'rusted'),
   (3, 'xCalibur', 'rogue', 'dagger', 'burning'),

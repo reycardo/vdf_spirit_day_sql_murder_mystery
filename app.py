@@ -16,7 +16,6 @@ run_query_btn = document.getElementById("run-query")
 list_tables_btn = document.getElementById("list-tables")
 load_default_btn = document.getElementById("load-default")
 reset_db_btn = document.getElementById("reset-db")
-file_input = document.getElementById("file-input")
 results_meta_el = document.getElementById("results-meta")
 results_wrap_el = document.getElementById("results-wrap")
 saved_query_name_input = document.getElementById("saved-query-name")
@@ -49,11 +48,9 @@ TABLE_DESCRIPTIONS = {
     "beastiary": "Monsters, their damage range, whether they're nocturnal, and where they roam.",
     "class_weapon_permissions": "Which weapons each class is allowed to equip.",
     "classes": "Player classes and the bonus/penalty damage they add to a hit.",
-    "clues": "Investigation notes tying suspects to locations and observations.",
     "damage_logs": "Timestamped damage events taken by each player.",
     "places": "In-game locations with their sunset/sunrise times.",
     "player_overview": "Players, their class, currently equipped weapon, and its effect.",
-    "suspects": "Suspects, their alibi, and a suspicious score.",
     "trades": "Weapon trades between players, including effect and timestamp.",
     "weapon_effects": "Weapon effects (e.g. burning, poisoned) and their damage increment.",
     "weapons": "Base weapons and their base damage.",
@@ -244,20 +241,6 @@ async def load_default_script() -> None:
         set_status(str(exc), "error")
 
 
-async def handle_file_upload(event) -> None:
-    try:
-        files = event.target.files
-        if files.length == 0:
-            return
-
-        sql_file = files[0]
-        script_text = await sql_file.text()
-        create_db_from_sql(str(script_text))
-        set_status(f"Loaded SQL script from {sql_file.name}.", "ok")
-    except Exception as exc:  # noqa: BLE001
-        set_status(f"Failed to load SQL file: {exc}", "error")
-
-
 def reset_db(_event=None) -> None:
     global last_query_columns, last_query_rows, current_results_page
     if not loaded_script:
@@ -346,10 +329,6 @@ def list_tables(_event=None) -> None:
 
 def on_load_default_click(_event=None) -> None:
     asyncio.create_task(load_default_script())
-
-
-def on_file_change(event) -> None:
-    asyncio.create_task(handle_file_upload(event))
 
 
 def load_saved_queries() -> dict:
@@ -494,7 +473,6 @@ async def bootstrap() -> None:
         list_tables_btn.addEventListener("click", list_tables_proxy)
         run_query_btn.addEventListener("click", run_query_proxy)
         reset_db_btn.addEventListener("click", reset_db_proxy)
-        file_input.addEventListener("change", file_change_proxy)
         save_query_btn.addEventListener("click", save_query_proxy)
         load_saved_query_btn.addEventListener("click", load_saved_query_proxy)
         delete_saved_query_btn.addEventListener("click", delete_saved_query_proxy)
@@ -506,7 +484,7 @@ async def bootstrap() -> None:
 
         load_default_btn.disabled = False
         accuse_submit_btn.disabled = False
-        set_status("Python runtime is ready. Load a database script to begin.", "ok")
+        set_status(f"Python runtime is ready. Load {DEFAULT_SQL_PATH} to begin.", "ok")
     except Exception as exc:  # noqa: BLE001
         set_status(f"Startup failed: {exc}", "error")
 
@@ -521,7 +499,6 @@ load_default_proxy = create_proxy(on_load_default_click)
 list_tables_proxy = create_proxy(list_tables)
 run_query_proxy = create_proxy(run_query)
 reset_db_proxy = create_proxy(reset_db)
-file_change_proxy = create_proxy(on_file_change)
 save_query_proxy = create_proxy(save_query)
 load_saved_query_proxy = create_proxy(load_saved_query)
 delete_saved_query_proxy = create_proxy(delete_saved_query)

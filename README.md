@@ -75,5 +75,4 @@ Then open `http://localhost:8000`.
 ## Notes
 
 - Any changes made by `INSERT/UPDATE/DELETE` are in-memory only and reset on refresh.
-- You can also click **Load .sql file** to test another SQL script without changing the repo.
 - Query execution is single-statement per run (for example one `SELECT` or one `UPDATE`).
