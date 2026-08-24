@@ -70,6 +70,19 @@ body {
   letter-spacing: -0.02em;
 }
 
+.hero-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.tutorial-btn {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
 .hero h1 span {
   color: var(--accent);
 }
@@ -392,4 +405,77 @@ code {
   .clues-controls .btn {
     flex: 1;
   }
+}
+
+.tutorial-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(4px);
+}
+
+.tutorial-overlay[hidden] {
+  display: none;
+}
+
+body.tutorial-open {
+  overflow: hidden;
+}
+
+.tutorial-modal {
+  width: min(560px, 100%);
+  max-height: 85vh;
+  overflow-y: auto;
+  background: #fdfdfb;
+  border-radius: 18px;
+  border: 1px solid var(--panel-border);
+  box-shadow: var(--shadow);
+  padding: 1.4rem;
+  animation: rise 260ms ease-out;
+}
+
+.tutorial-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.tutorial-head h2 {
+  margin: 0;
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: 1.4rem;
+}
+
+.tutorial-close {
+  padding: 0.3rem 0.6rem;
+  border-radius: 8px;
+  line-height: 1;
+}
+
+.tutorial-step {
+  margin-top: 1rem;
+}
+
+.tutorial-step h3 {
+  margin: 0 0 0.3rem;
+  font-size: 1rem;
+  color: var(--accent);
+}
+
+.tutorial-step p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.tutorial-footer {
+  margin-top: 1.4rem;
+  display: flex;
+  justify-content: flex-end;
 }
