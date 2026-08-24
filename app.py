@@ -1,6 +1,7 @@
 import asyncio
 import html
 import json
+import re
 import sqlite3
 import time
 
@@ -28,6 +29,7 @@ loaded_script = ""
 DEFAULT_SQL_PATH = "sql/database.sql"
 INCLUDE_PREFIX = "-- @include"
 SAVED_QUERIES_STORAGE_KEY = "sqlMysterySavedQueries"
+VIEW_NAME_PATTERN = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
 
 
 def set_status(message: str, kind: str = "") -> None:
@@ -48,7 +50,16 @@ def create_db_from_sql(script_text: str) -> None:
     run_query_btn.disabled = False
     list_tables_btn.disabled = False
     reset_db_btn.disabled = False
-    set_status("Database loaded. You can run queries now.", "ok")
+
+    failed_views = register_all_saved_query_views()
+    if failed_views:
+        names = ", ".join(failed_views)
+        set_status(
+            f"Database loaded. Some saved queries could not be registered as views: {names}.",
+            "error",
+        )
+    else:
+        set_status("Database loaded. You can run queries now.", "ok")
 
 
 def normalize_sql_path(path: str) -> str:
@@ -264,6 +275,36 @@ def persist_saved_queries(saved_queries: dict) -> None:
     localStorage.setItem(SAVED_QUERIES_STORAGE_KEY, json.dumps(saved_queries))
 
 
+def register_query_view(name: str, query: str) -> None:
+    if conn is None:
+        return
+
+    if not VIEW_NAME_PATTERN.fullmatch(name):
+        raise ValueError(
+            "View name must start with a letter/underscore and contain only letters, digits, underscores."
+        )
+
+    view_body = query.strip().rstrip(";")
+    conn.executescript(f'DROP VIEW IF EXISTS "{name}"; CREATE VIEW "{name}" AS {view_body};')
+
+
+def drop_query_view(name: str) -> None:
+    if conn is None:
+        return
+    conn.execute(f'DROP VIEW IF EXISTS "{name}"')
+    conn.commit()
+
+
+def register_all_saved_query_views() -> list[str]:
+    failed_names = []
+    for name, query in load_saved_queries().items():
+        try:
+            register_query_view(name, query)
+        except Exception:  # noqa: BLE001
+            failed_names.append(name)
+    return failed_names
+
+
 def refresh_saved_queries_select(selected_name: str = "") -> None:
     saved_queries = load_saved_queries()
 
@@ -294,7 +335,12 @@ def save_query(_event=None) -> None:
     saved_queries[name] = query
     persist_saved_queries(saved_queries)
     refresh_saved_queries_select(name)
-    set_status(f"Saved query '{name}'.", "ok")
+
+    try:
+        register_query_view(name, query)
+        set_status(f"Saved query '{name}'. You can now query it like a table.", "ok")
+    except Exception as exc:  # noqa: BLE001
+        set_status(f"Saved query '{name}', but it could not be registered as a view: {exc}", "error")
 
 
 def load_saved_query(_event=None) -> None:
@@ -321,6 +367,12 @@ def delete_saved_query(_event=None) -> None:
     saved_queries = load_saved_queries()
     saved_queries.pop(name, None)
     persist_saved_queries(saved_queries)
+
+    try:
+        drop_query_view(name)
+    except Exception:  # noqa: BLE001
+        pass
+
     refresh_saved_queries_select()
     set_status(f"Deleted saved query '{name}'.", "ok")
 
