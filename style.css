@@ -325,6 +325,28 @@ h2 {
   overflow-x: auto;
 }
 
+.results-warning {
+  margin: 0 0 0.6rem;
+  padding: 0.5rem 0.8rem;
+  border-radius: 10px;
+  background: rgba(185, 28, 28, 0.1);
+  color: var(--warning);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.results-pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 0.8rem;
+}
+
+.results-page-info {
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
 .clues-panel {
   display: grid;
   gap: 0.9rem;

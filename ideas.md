@@ -45,6 +45,14 @@ ORDER BY b.monster_name;
 - user finds that only place that could have monster that hit for that damage at 19h is Whisper Grove
 
 
+SELECT * FROM zone_presence 
+WHERE place = 'Whisper Grove' 
+AND entered_at <= '19:07:41' 
+AND (left_at IS NULL OR left_at >= '19:07:41');
+
+- user finds who was at Whisper Grove at time of death
+
+
 - now they will have to query for what can hit for 34 damage
 
 SELECT
@@ -82,18 +90,23 @@ ORDER BY c.class_name, w.weapon_name, we.weapon_effect;
 
 TODO: find something to thin out what class the killer was using
 
+
 The weapon was a poisoned dagger
 
+- knowing that the player was a mage 
 
-- initial image will say it was a burning weapon (possible weapons that would kill would be a non burning weapon and the correct burning weapon)
-- searching for trades with dagger	    legendary	    burning will show too many distinct weapons exist
-- Z X Y zones exist, some have different monsters, will have to know what monsters xCalibur was fighting before dying to know what zone he was.
-- He was fighting Nightmaw in Whisper Grove, and damage_logs shows he was hit with burning Talons - then we know that he died in Whisper Grove
-- Then we need to check from there, what mages also traded the legendary dagger to the easily gullible that currently has the dagger
+SELECT * FROM player_overview b
+join possible_suspects a
+on a.username = b.username
+where class = "mage"
 
 - killer traded weapon to easily_Gullible123 after time of death
-- 4 monsters available, each monster deals damage differently, they have to check 
-- damage logs reveal that 
 
 - have an image for how damage works = class + base weapon damage + effect
 - have an image for how travelling works = takes 1h to be out of combat to move from one location to the next
+
+- added zone_presence (username, place, entered_at, left_at) so players can filter who was actually
+  in Whisper Grove around 19:07:41 (time of death); narrows suspects to VoidCook, ShadowMend, RuneTank
+  (everyone else was elsewhere or had already left/not yet arrived)
+
+

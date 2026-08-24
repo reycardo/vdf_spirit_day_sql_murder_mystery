@@ -40,6 +40,11 @@ VIEW_NAME_PATTERN = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
 #   python3 -c "import hashlib; print(hashlib.sha256('name here'.casefold().strip().encode()).hexdigest())"
 SOLUTION_NAME_HASH = "1fba807977380320acd45691819ff707bf9f26b030e39f4f21af22450a794cec"
 
+RESULTS_PAGE_SIZE = 50
+last_query_columns: list[str] = []
+last_query_rows: list[tuple] = []
+current_results_page = 0
+
 TABLE_DESCRIPTIONS = {
     "beastiary": "Monsters, their damage range, whether they're nocturnal, and where they roam.",
     "class_weapon_permissions": "Which weapons each class is allowed to equip.",
@@ -47,11 +52,12 @@ TABLE_DESCRIPTIONS = {
     "clues": "Investigation notes tying suspects to locations and observations.",
     "damage_logs": "Timestamped damage events taken by each player.",
     "places": "In-game locations with their sunset/sunrise times.",
-    "player_overview": "Players, their class, and their currently equipped weapon.",
+    "player_overview": "Players, their class, currently equipped weapon, and its effect.",
     "suspects": "Suspects, their alibi, and a suspicious score.",
-    "trades": "Item trades between players, including rarity, effect, and timestamp.",
+    "trades": "Weapon trades between players, including effect and timestamp.",
     "weapon_effects": "Weapon effects (e.g. burning, poisoned) and their damage increment.",
     "weapons": "Base weapons and their base damage.",
+    "zone_presence": "Who was in which place and when, tracked by entry/exit timestamps.",
 }
 
 
@@ -152,6 +158,26 @@ async def load_sql_with_includes(entry_path: str) -> str:
 
 
 def render_table(columns: list[str], rows: list[tuple]) -> None:
+    global last_query_columns, last_query_rows, current_results_page
+    last_query_columns = columns
+    last_query_rows = rows
+    current_results_page = 0
+    render_current_results_page()
+
+
+def render_current_results_page() -> None:
+    global current_results_page
+
+    columns = last_query_columns
+    rows = last_query_rows
+    total = len(rows)
+    total_pages = max(1, -(-total // RESULTS_PAGE_SIZE))
+    current_results_page = max(0, min(current_results_page, total_pages - 1))
+
+    start = current_results_page * RESULTS_PAGE_SIZE
+    end = min(start + RESULTS_PAGE_SIZE, total)
+    page_rows = rows[start:end]
+
     header_html = "".join(f"<th>{html.escape(col)}</th>" for col in columns)
 
     body_html = "".join(
@@ -161,18 +187,52 @@ def render_table(columns: list[str], rows: list[tuple]) -> None:
             for cell in row
         )
         + "</tr>"
-        for row in rows
+        for row in page_rows
     )
+
+    warning_html = ""
+    if total > RESULTS_PAGE_SIZE:
+        warning_html = (
+            f'<p class="results-warning">Showing {start + 1}-{end} of {total} rows '
+            f"(only {RESULTS_PAGE_SIZE} rows are shown per page).</p>"
+        )
+
+    pagination_html = ""
+    if total_pages > 1:
+        prev_disabled = "disabled" if current_results_page == 0 else ""
+        next_disabled = "disabled" if current_results_page >= total_pages - 1 else ""
+        pagination_html = (
+            '<div class="results-pagination">'
+            f'<button type="button" class="btn btn-ghost" id="results-prev-page" {prev_disabled}>Previous</button>'
+            f'<span class="results-page-info">Page {current_results_page + 1} of {total_pages}</span>'
+            f'<button type="button" class="btn btn-ghost" id="results-next-page" {next_disabled}>Next</button>'
+            "</div>"
+        )
 
     results_wrap_el.innerHTML = (
         "<section class=\"result-set\">"
         "<h3>Result Set 1</h3>"
-        "<table><thead><tr>"
+        + warning_html
+        + "<table><thead><tr>"
         + header_html
         + "</tr></thead><tbody>"
         + body_html
-        + "</tbody></table></section>"
+        + "</tbody></table>"
+        + pagination_html
+        + "</section>"
     )
+
+
+def on_results_wrap_click(event) -> None:
+    global current_results_page
+
+    target_id = str(event.target.id)
+    if target_id == "results-prev-page":
+        current_results_page -= 1
+        render_current_results_page()
+    elif target_id == "results-next-page":
+        current_results_page += 1
+        render_current_results_page()
 
 
 async def load_default_script() -> None:
@@ -199,6 +259,7 @@ async def handle_file_upload(event) -> None:
 
 
 def reset_db(_event=None) -> None:
+    global last_query_columns, last_query_rows, current_results_page
     if not loaded_script:
         return
 
@@ -206,6 +267,9 @@ def reset_db(_event=None) -> None:
         create_db_from_sql(loaded_script)
         set_status("Database reset to initial loaded SQL script.", "ok")
         results_meta_el.textContent = "Database reset. Run a query."
+        last_query_columns = []
+        last_query_rows = []
+        current_results_page = 0
         results_wrap_el.innerHTML = ""
     except Exception as exc:  # noqa: BLE001
         set_status(f"Could not reset database: {exc}", "error")
@@ -436,6 +500,7 @@ async def bootstrap() -> None:
         delete_saved_query_btn.addEventListener("click", delete_saved_query_proxy)
         saved_queries_select.addEventListener("change", saved_queries_select_change_proxy)
         accuse_submit_btn.addEventListener("click", submit_accusation_proxy)
+        results_wrap_el.addEventListener("click", results_wrap_click_proxy)
 
         refresh_saved_queries_select()
 
@@ -462,5 +527,6 @@ load_saved_query_proxy = create_proxy(load_saved_query)
 delete_saved_query_proxy = create_proxy(delete_saved_query)
 saved_queries_select_change_proxy = create_proxy(on_saved_queries_select_change)
 submit_accusation_proxy = create_proxy(submit_accusation)
+results_wrap_click_proxy = create_proxy(on_results_wrap_click)
 
 asyncio.create_task(bootstrap())

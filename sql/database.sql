@@ -12,3 +12,4 @@
 -- @include tables/classes.sql
 -- @include tables/class_weapon_permissions.sql
 -- @include tables/places.sql
+-- @include tables/zone_presence.sql
