@@ -2,7 +2,6 @@
 -- Include files are resolved by app.py before executing SQL.
 
 -- @include tables/damage_logs.sql
--- @include tables/trades.sql
 -- @include tables/player_overview.sql
 -- @include tables/beastiary.sql
 -- @include tables/weapons.sql

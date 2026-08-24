@@ -6,9 +6,16 @@
       "description": "The moment Jimmy Jim realized he was murdered."
     },    
     {
-      "file": "weapons.png",
-      "title": "weapons",
-      "description": "the 4 weapons."
-    }
+      "file": "dmg_done.jpg",
+      "title": "Calculating Damage",
+      "description": "How to calculate damage done to a player"
+    },
+    {
+      "file": "equip_warning.jpg",
+      "title": "Equipment Warning",
+      "description": "Warning about equipping certain items"
+    }    
+
+    
   ]
 }

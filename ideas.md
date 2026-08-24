@@ -1,3 +1,5 @@
+add id to everything no gaps
+
 - kid died in game
 - check damage_logs by username
 
