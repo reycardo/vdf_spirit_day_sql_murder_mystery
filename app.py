@@ -37,6 +37,20 @@ VIEW_NAME_PATTERN = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
 # TODO: set this to the actual killer's name once the mystery is finalized.
 SOLUTION_NAME = "CHANGE_ME"
 
+TABLE_DESCRIPTIONS = {
+    "beastiary": "Monsters, their damage range, whether they're nocturnal, and where they roam.",
+    "class_weapon_permissions": "Which weapons each class is allowed to equip.",
+    "classes": "Player classes and the bonus/penalty damage they add to a hit.",
+    "clues": "Investigation notes tying suspects to locations and observations.",
+    "damage_logs": "Timestamped damage events taken by each player.",
+    "places": "In-game locations with their sunset/sunrise times.",
+    "player_overview": "Players, their class, and their currently equipped weapon.",
+    "suspects": "Suspects, their alibi, and a suspicious score.",
+    "trades": "Item trades between players, including rarity, effect, and timestamp.",
+    "weapon_effects": "Weapon effects (e.g. burning, poisoned) and their damage increment.",
+    "weapons": "Base weapons and their base damage.",
+}
+
 
 def set_status(message: str, kind: str = "") -> None:
     status_el.textContent = message
@@ -249,8 +263,12 @@ def list_tables(_event=None) -> None:
         )
 
         rows = cursor.fetchall()
+        rows = [
+            (name, TABLE_DESCRIPTIONS.get(name, "Saved query view or undocumented table."))
+            for (name,) in rows
+        ]
         elapsed_ms = max(1, round((time.perf_counter() - started_at) * 1000))
-        render_table(["table_name"], rows)
+        render_table(["table_name", "description"], rows)
         results_meta_el.textContent = (
             f"Table list fetched in {elapsed_ms} ms. {len(rows)} table(s) found."
         )

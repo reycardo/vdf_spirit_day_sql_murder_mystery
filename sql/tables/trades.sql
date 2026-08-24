@@ -12,7 +12,7 @@ CREATE TABLE trades (
 
 INSERT INTO trades (id, item, item_rarity, item_effect, trade_timestamp, buyer, seller) VALUES
   (1, 'Iron Dagger', 'common', 'rusted', '18:51:09', 'MoonPriest', 'GromByte'),
-  (2, 'Steel Mace', 'uncommon', 'electrified', '18:53:42', 'ShieldTotem', 'RuneTank'),
+  (2, 'Steel staff', 'uncommon', 'electrified', '18:53:42', 'ShieldTotem', 'RuneTank'),
   (3, 'Worn Sword', 'common', 'burning', '18:56:27', 'xCalibur', 'ArthasMain'),
   (4, 'Oak Buckler', 'common', NULL, '18:58:11', 'EluneKid', 'VoidCook'),
   (5, 'Hunter Axe', 'uncommon', 'rusted', '19:00:04', 'GromByte', 'MoonPriest'),

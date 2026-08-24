@@ -82,14 +82,14 @@ ORDER BY c.class_name, w.weapon_name, we.weapon_effect;
 
 TODO: find something to thin out what class the killer was using
 
+The weapon was a poisoned dagger
+
 
 - initial image will say it was a burning weapon (possible weapons that would kill would be a non burning weapon and the correct burning weapon)
 - searching for trades with dagger	    legendary	    burning will show too many distinct weapons exist
 - Z X Y zones exist, some have different monsters, will have to know what monsters xCalibur was fighting before dying to know what zone he was.
 - He was fighting Nightmaw in Whisper Grove, and damage_logs shows he was hit with burning Talons - then we know that he died in Whisper Grove
 - Then we need to check from there, what mages also traded the legendary dagger to the easily gullible that currently has the dagger
-
-- have a table with tolls (username, entered, place)
 
 - killer traded weapon to easily_Gullible123 after time of death
 - 4 monsters available, each monster deals damage differently, they have to check 

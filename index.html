@@ -41,7 +41,7 @@
             Vodatone CEO's son - Jimmy Jim - was brutally murdered... <br><br>
             ...in a video game called "World of Vodacraft", apparently he was ambushed or something 
             and now he's been crying all week and it's up to you to figure out who did it.<br>
-            In the <span class="highlight">damage_logs</span> table you will find a log of everyone who got damaged on the day of the incident.
+            In the <span class="highlight">damage_logs</span> table you will find a log of everyone who got damaged on the day of the incident. <br>
             I've attached a few clues in the <span class="highlight">clues</span> folder, you can browse them in the Clues Folder Viewer.
           </p>
         </div>
@@ -66,7 +66,10 @@
           </div>
         </div>
         <textarea id="query-input" spellcheck="false" aria-label="SQL query input">
-SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;
+SELECT * 
+FROM damage_logs
+WHERE username = "???"
+ORDER BY damage_timestamp DESC;
         </textarea>
         <div class="saved-queries-row">
           <input
@@ -112,7 +115,7 @@ SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;
       <section class="panel accuse-panel" aria-label="Accuse the killer">
         <h2>Name the Killer</h2>
         <p class="accuse-subtitle">
-          Found enough evidence? Submit the name of whoever you believe murdered Jimmy Jim.
+          Found enough evidence? Submit the name of whoever you believe was the perpetrator of such a crime.
         </p>
         <div class="accuse-row">
           <input
