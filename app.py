@@ -402,6 +402,7 @@ async def bootstrap() -> None:
     try:
         load_default_btn.disabled = True
         list_tables_btn.disabled = True
+        accuse_submit_btn.disabled = True
 
         load_default_btn.addEventListener("click", load_default_proxy)
         list_tables_btn.addEventListener("click", list_tables_proxy)
@@ -417,6 +418,7 @@ async def bootstrap() -> None:
         refresh_saved_queries_select()
 
         load_default_btn.disabled = False
+        accuse_submit_btn.disabled = False
         set_status("Python runtime is ready. Load a database script to begin.", "ok")
     except Exception as exc:  # noqa: BLE001
         set_status(f"Startup failed: {exc}", "error")
