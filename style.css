@@ -83,6 +83,43 @@ body {
   white-space: nowrap;
 }
 
+.intro-panel {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.intro-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.intro-head .kicker {
+  font-size: 0.72rem;
+}
+
+.intro-head h2 {
+  margin: 0;
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: 1.3rem;
+}
+
+.intro-body {
+  border-left: 3px solid var(--accent);
+  padding-left: 1rem;
+}
+
+.intro-body p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+  max-width: 70ch;
+}
+
+.intro-placeholder {
+  font-style: italic;
+}
+
 .hero h1 span {
   color: var(--accent);
 }
