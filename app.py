@@ -1,4 +1,5 @@
 import asyncio
+import hashlib
 import html
 import json
 import re
@@ -34,8 +35,10 @@ INCLUDE_PREFIX = "-- @include"
 SAVED_QUERIES_STORAGE_KEY = "sqlMysterySavedQueries"
 VIEW_NAME_PATTERN = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
 
-# TODO: set this to the actual killer's name once the mystery is finalized.
-SOLUTION_NAME = "CHANGE_ME"
+# SHA-256 hash of the killer's name (casefolded) so the plaintext answer never
+# appears in the source. Regenerate with:
+#   python3 -c "import hashlib; print(hashlib.sha256('name here'.casefold().strip().encode()).hexdigest())"
+SOLUTION_NAME_HASH = "1fba807977380320acd45691819ff707bf9f26b030e39f4f21af22450a794cec"
 
 TABLE_DESCRIPTIONS = {
     "beastiary": "Monsters, their damage range, whether they're nocturnal, and where they roam.",
@@ -390,7 +393,8 @@ def submit_accusation(_event=None) -> None:
         accuse_result_el.className = "accuse-result incorrect"
         return
 
-    if accused.casefold() == SOLUTION_NAME.casefold():
+    accused_hash = hashlib.sha256(accused.casefold().encode()).hexdigest()
+    if accused_hash == SOLUTION_NAME_HASH:
         accuse_result_el.textContent = f"🎉 Congratulations! {accused} was the killer. Case closed!"
         accuse_result_el.className = "accuse-result correct"
     else:
