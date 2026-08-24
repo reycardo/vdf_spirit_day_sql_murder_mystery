@@ -120,6 +120,13 @@ body {
   font-style: italic;
 }
 
+.highlight {
+  font-style: normal;
+  font-weight: 700;
+  color: var(--accent);
+  font-family: "Space Grotesk", monospace;
+}
+
 .accuse-panel {
   display: grid;
   gap: 0.6rem;

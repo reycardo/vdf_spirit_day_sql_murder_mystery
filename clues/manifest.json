@@ -1,6 +1,11 @@
 {
   "images": [
     {
+      "file": "kid_crying.png",
+      "title": "Jimmy Jim crying",
+      "description": "The moment Jimmy Jim realized he was murdered."
+    },    
+    {
       "file": "weapons.png",
       "title": "weapons",
       "description": "the 4 weapons."
