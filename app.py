@@ -1,9 +1,10 @@
 import asyncio
 import html
+import json
 import sqlite3
 import time
 
-from js import document
+from js import document, localStorage
 from pyodide.ffi import create_proxy
 from pyodide.http import pyfetch
 
@@ -16,11 +17,17 @@ reset_db_btn = document.getElementById("reset-db")
 file_input = document.getElementById("file-input")
 results_meta_el = document.getElementById("results-meta")
 results_wrap_el = document.getElementById("results-wrap")
+saved_query_name_input = document.getElementById("saved-query-name")
+save_query_btn = document.getElementById("save-query")
+saved_queries_select = document.getElementById("saved-queries-select")
+load_saved_query_btn = document.getElementById("load-saved-query")
+delete_saved_query_btn = document.getElementById("delete-saved-query")
 
 conn = None
 loaded_script = ""
 DEFAULT_SQL_PATH = "sql/database.sql"
 INCLUDE_PREFIX = "-- @include"
+SAVED_QUERIES_STORAGE_KEY = "sqlMysterySavedQueries"
 
 
 def set_status(message: str, kind: str = "") -> None:
@@ -243,6 +250,81 @@ def on_file_change(event) -> None:
     asyncio.create_task(handle_file_upload(event))
 
 
+def load_saved_queries() -> dict:
+    raw = localStorage.getItem(SAVED_QUERIES_STORAGE_KEY)
+    if not raw:
+        return {}
+    try:
+        return json.loads(raw)
+    except ValueError:
+        return {}
+
+
+def persist_saved_queries(saved_queries: dict) -> None:
+    localStorage.setItem(SAVED_QUERIES_STORAGE_KEY, json.dumps(saved_queries))
+
+
+def refresh_saved_queries_select(selected_name: str = "") -> None:
+    saved_queries = load_saved_queries()
+
+    options_html = '<option value="">Saved queries...</option>' + "".join(
+        f'<option value="{html.escape(name)}">{html.escape(name)}</option>'
+        for name in sorted(saved_queries)
+    )
+    saved_queries_select.innerHTML = options_html
+    saved_queries_select.value = selected_name
+
+    has_selection = bool(saved_queries_select.value)
+    load_saved_query_btn.disabled = not has_selection
+    delete_saved_query_btn.disabled = not has_selection
+
+
+def save_query(_event=None) -> None:
+    name = str(saved_query_name_input.value).strip()
+    query = str(query_input.value).strip()
+
+    if not name:
+        set_status("Enter a name to save this query.", "error")
+        return
+    if not query:
+        set_status("Write a query before saving it.", "error")
+        return
+
+    saved_queries = load_saved_queries()
+    saved_queries[name] = query
+    persist_saved_queries(saved_queries)
+    refresh_saved_queries_select(name)
+    set_status(f"Saved query '{name}'.", "ok")
+
+
+def load_saved_query(_event=None) -> None:
+    name = str(saved_queries_select.value)
+    if not name:
+        return
+
+    saved_queries = load_saved_queries()
+    query = saved_queries.get(name)
+    if query is None:
+        set_status(f"Saved query '{name}' not found.", "error")
+        return
+
+    query_input.value = query
+    saved_query_name_input.value = name
+    set_status(f"Loaded saved query '{name}'.", "ok")
+
+
+def delete_saved_query(_event=None) -> None:
+    name = str(saved_queries_select.value)
+    if not name:
+        return
+
+    saved_queries = load_saved_queries()
+    saved_queries.pop(name, None)
+    persist_saved_queries(saved_queries)
+    refresh_saved_queries_select()
+    set_status(f"Deleted saved query '{name}'.", "ok")
+
+
 async def bootstrap() -> None:
     try:
         load_default_btn.disabled = True
@@ -253,6 +335,12 @@ async def bootstrap() -> None:
         run_query_btn.addEventListener("click", run_query_proxy)
         reset_db_btn.addEventListener("click", reset_db_proxy)
         file_input.addEventListener("change", file_change_proxy)
+        save_query_btn.addEventListener("click", save_query_proxy)
+        load_saved_query_btn.addEventListener("click", load_saved_query_proxy)
+        delete_saved_query_btn.addEventListener("click", delete_saved_query_proxy)
+        saved_queries_select.addEventListener("change", saved_queries_select_change_proxy)
+
+        refresh_saved_queries_select()
 
         load_default_btn.disabled = False
         set_status("Python runtime is ready. Load a database script to begin.", "ok")
@@ -260,10 +348,20 @@ async def bootstrap() -> None:
         set_status(f"Startup failed: {exc}", "error")
 
 
+def on_saved_queries_select_change(_event=None) -> None:
+    has_selection = bool(saved_queries_select.value)
+    load_saved_query_btn.disabled = not has_selection
+    delete_saved_query_btn.disabled = not has_selection
+
+
 load_default_proxy = create_proxy(on_load_default_click)
 list_tables_proxy = create_proxy(list_tables)
 run_query_proxy = create_proxy(run_query)
 reset_db_proxy = create_proxy(reset_db)
 file_change_proxy = create_proxy(on_file_change)
+save_query_proxy = create_proxy(save_query)
+load_saved_query_proxy = create_proxy(load_saved_query)
+delete_saved_query_proxy = create_proxy(delete_saved_query)
+saved_queries_select_change_proxy = create_proxy(on_saved_queries_select_change)
 
 asyncio.create_task(bootstrap())
