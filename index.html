@@ -48,6 +48,20 @@
         <textarea id="query-input" spellcheck="false" aria-label="SQL query input">
 SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;
         </textarea>
+        <div class="saved-queries-row">
+          <input
+            id="saved-query-name"
+            type="text"
+            placeholder="Name this query..."
+            aria-label="Saved query name"
+          />
+          <button id="save-query" class="btn btn-secondary">Save Query</button>
+          <select id="saved-queries-select" aria-label="Saved queries">
+            <option value="">Saved queries...</option>
+          </select>
+          <button id="load-saved-query" class="btn btn-secondary" disabled>Load</button>
+          <button id="delete-saved-query" class="btn btn-ghost" disabled>Delete</button>
+        </div>
       </section>
 
       <section class="panel output-panel">
