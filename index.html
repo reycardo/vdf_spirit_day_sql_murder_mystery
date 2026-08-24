@@ -106,6 +106,23 @@ SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;
           <button id="next-clue" class="btn btn-primary" disabled>Next clue</button>
         </div>
       </section>
+
+      <section class="panel accuse-panel" aria-label="Accuse the killer">
+        <h2>Name the Killer</h2>
+        <p class="accuse-subtitle">
+          Found enough evidence? Submit the name of whoever you believe murdered Jimmy Jim.
+        </p>
+        <div class="accuse-row">
+          <input
+            id="accuse-input"
+            type="text"
+            placeholder="Enter suspect name..."
+            aria-label="Accused suspect name"
+          />
+          <button id="accuse-submit" class="btn btn-primary">Submit Accusation</button>
+        </div>
+        <p id="accuse-result" class="accuse-result" role="status"></p>
+      </section>
     </main>
 
     <div id="tutorial-overlay" class="tutorial-overlay" hidden>
@@ -166,6 +183,14 @@ SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;
             <p>
               Use <strong>Previous clue</strong> / <strong>Next clue</strong> (or the ←/→ arrow
               keys) to page through evidence images in the Clues Folder Viewer.
+            </p>
+          </section>
+          <section class="tutorial-step">
+            <h3>7. Name the killer</h3>
+            <p>
+              Once you've pieced the clues together, type the suspect's name in the
+              <strong>Name the Killer</strong> section and click <strong>Submit Accusation</strong>.
+              You'll be told right away if you cracked the case or need to keep investigating.
             </p>
           </section>
         </div>

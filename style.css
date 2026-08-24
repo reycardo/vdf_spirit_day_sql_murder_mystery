@@ -120,6 +120,48 @@ body {
   font-style: italic;
 }
 
+.accuse-panel {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.accuse-subtitle {
+  margin: 0;
+  color: var(--muted);
+}
+
+.accuse-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.accuse-row input {
+  flex: 1;
+  min-width: 200px;
+  padding: 0.66rem 0.8rem;
+  border-radius: 12px;
+  border: 1px solid var(--panel-border);
+  font-family: inherit;
+  font-size: 0.95rem;
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--ink);
+}
+
+.accuse-result {
+  margin: 0;
+  font-weight: 700;
+  min-height: 1.2em;
+}
+
+.accuse-result.correct {
+  color: var(--success);
+}
+
+.accuse-result.incorrect {
+  color: var(--warning);
+}
+
 .hero h1 span {
   color: var(--accent);
 }

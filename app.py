@@ -23,6 +23,9 @@ save_query_btn = document.getElementById("save-query")
 saved_queries_select = document.getElementById("saved-queries-select")
 load_saved_query_btn = document.getElementById("load-saved-query")
 delete_saved_query_btn = document.getElementById("delete-saved-query")
+accuse_input = document.getElementById("accuse-input")
+accuse_submit_btn = document.getElementById("accuse-submit")
+accuse_result_el = document.getElementById("accuse-result")
 
 conn = None
 loaded_script = ""
@@ -30,6 +33,9 @@ DEFAULT_SQL_PATH = "sql/database.sql"
 INCLUDE_PREFIX = "-- @include"
 SAVED_QUERIES_STORAGE_KEY = "sqlMysterySavedQueries"
 VIEW_NAME_PATTERN = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
+
+# TODO: set this to the actual killer's name once the mystery is finalized.
+SOLUTION_NAME = "CHANGE_ME"
 
 
 def set_status(message: str, kind: str = "") -> None:
@@ -359,6 +365,21 @@ def load_saved_query(_event=None) -> None:
     set_status(f"Loaded saved query '{name}'.", "ok")
 
 
+def submit_accusation(_event=None) -> None:
+    accused = str(accuse_input.value).strip()
+    if not accused:
+        accuse_result_el.textContent = "Enter a suspect's name before accusing them."
+        accuse_result_el.className = "accuse-result incorrect"
+        return
+
+    if accused.casefold() == SOLUTION_NAME.casefold():
+        accuse_result_el.textContent = f"🎉 Congratulations! {accused} was the killer. Case closed!"
+        accuse_result_el.className = "accuse-result correct"
+    else:
+        accuse_result_el.textContent = f"❌ {accused} is not the killer. Keep investigating and try again."
+        accuse_result_el.className = "accuse-result incorrect"
+
+
 def delete_saved_query(_event=None) -> None:
     name = str(saved_queries_select.value)
     if not name:
@@ -391,6 +412,7 @@ async def bootstrap() -> None:
         load_saved_query_btn.addEventListener("click", load_saved_query_proxy)
         delete_saved_query_btn.addEventListener("click", delete_saved_query_proxy)
         saved_queries_select.addEventListener("change", saved_queries_select_change_proxy)
+        accuse_submit_btn.addEventListener("click", submit_accusation_proxy)
 
         refresh_saved_queries_select()
 
@@ -415,5 +437,6 @@ save_query_proxy = create_proxy(save_query)
 load_saved_query_proxy = create_proxy(load_saved_query)
 delete_saved_query_proxy = create_proxy(delete_saved_query)
 saved_queries_select_change_proxy = create_proxy(on_saved_queries_select_change)
+submit_accusation_proxy = create_proxy(submit_accusation)
 
 asyncio.create_task(bootstrap())
