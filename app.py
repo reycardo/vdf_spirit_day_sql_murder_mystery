@@ -51,9 +51,7 @@ TABLE_DESCRIPTIONS = {
     "damage_logs": "Timestamped damage events taken by each player.",
     "places": "In-game locations with their sunset/sunrise times.",
     "player_overview": "Players, their class, currently equipped weapon, and its effect.",
-    "weapons": "Base weapons and their base damage.",
-    "zone_presence": "Who was in which place and when, tracked by entry/exit timestamps.",
-}
+    "weapons": "Base weapons and their base damage.",}
 
 
 def set_status(message: str, kind: str = "") -> None:

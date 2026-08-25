@@ -8,17 +8,17 @@ CREATE TABLE damage_logs (
 );
 
 INSERT INTO damage_logs (id, username, damage_timestamp, damage_taken) VALUES
-  (1, 'ArthasMain', '19:04:05', 18),
-  (2, 'MoonPriest', '19:04:22', 12),
-  (3, 'xCalibur', '19:04:41', 15),
-  (4, 'GromByte', '19:05:07', 9),
-  (5, 'xCalibur', '19:05:16', 11),
-  (6, 'ShieldTotem', '19:05:31', 14),
-  (7, 'xCalibur', '19:05:54', 17),
-  (8, 'VoidCook', '19:06:03', 8),
-  (9, 'xCalibur', '19:06:19', 13),
-  (10, 'EluneKid', '19:06:43', 10),
-  (11, 'xCalibur', '19:06:55', 16),
-  (12, 'RuneTank', '19:07:12', 20),
-  (13, 'xCalibur', '19:07:24', 12),
-  (14, 'xCalibur', '19:07:41', 34);
+  (1, 'ArthasMain', '19:04', 18),
+  (2, 'MoonPriest', '19:04', 12),
+  (3, 'xCalibur', '19:04', 15),
+  (4, 'GromByte', '19:05', 9),
+  (5, 'xCalibur', '19:05', 11),
+  (6, 'ShieldTotem', '19:05', 14),
+  (7, 'xCalibur', '19:05', 17),
+  (8, 'VoidCook', '19:06', 8),
+  (9, 'xCalibur', '19:06', 13),
+  (10, 'EluneKid', '19:06', 10),
+  (11, 'xCalibur', '19:06', 16),
+  (12, 'RuneTank', '19:07', 20),
+  (13, 'xCalibur', '19:07', 12),
+  (14, 'xCalibur', '19:07', 34);
