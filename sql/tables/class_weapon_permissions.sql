@@ -10,13 +10,9 @@ CREATE TABLE class_weapon_permissions (
 );
 
 INSERT INTO class_weapon_permissions (id, class_name, weapon_name) VALUES
-  (1, 'mage', 'staff'),
-  (2, 'mage', 'dagger'),
-  (3, 'rogue', 'dagger'),
-  (4, 'rogue', 'sword'),
-  (5, 'warrior', 'sword'),
-  (6, 'warrior', 'axe'),
-  (7, 'warrior', 'dagger'),
-  (8, 'bard', 'sword'),
-  (9, 'bard', 'axe'),
-  (10, 'bard', 'dagger');
+  (1, 'warrior', 'dagger'),
+  (2, 'warrior', 'axe'),
+  (3, 'mage', 'staff'),
+  (4, 'rogue', 'dagger'),
+  (5, 'bard', 'sword'),
+  (6, 'monk', 'sword');

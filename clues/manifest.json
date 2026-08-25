@@ -14,8 +14,11 @@
       "file": "equip_warning.jpg",
       "title": "Equipment Warning",
       "description": "Warning about equipping certain items"
-    }    
-
-    
+    },
+    {
+      "file": "nocturnal.jpg",
+      "title": "Monster Behavior",
+      "description": "Some monsters are nocturnal and only appear at night, while others are diurnal and only appear during the day."
+    }
   ]
 }

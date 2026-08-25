@@ -7,7 +7,8 @@ CREATE TABLE classes (
 );
 
 INSERT INTO classes (class_name, damage_min, damage_max) VALUES
-  ('warrior', 5, 5),
-  ('mage', -10, -5),
+  ('warrior', 10, 14),
+  ('mage', 0, 3),
   ('rogue', 0, 20),
-  ('bard', 0, 0);
+  ('bard', 4, 9),
+  ('monk', 6, 11);

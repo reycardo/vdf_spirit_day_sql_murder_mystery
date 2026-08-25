@@ -5,7 +5,6 @@
 -- @include tables/player_overview.sql
 -- @include tables/beastiary.sql
 -- @include tables/weapons.sql
--- @include tables/weapon_effects.sql
 -- @include tables/classes.sql
 -- @include tables/class_weapon_permissions.sql
 -- @include tables/places.sql
