@@ -14,7 +14,6 @@ status_el = document.getElementById("status")
 query_input = document.getElementById("query-input")
 run_query_btn = document.getElementById("run-query")
 list_tables_btn = document.getElementById("list-tables")
-load_default_btn = document.getElementById("load-default")
 reset_db_btn = document.getElementById("reset-db")
 results_meta_el = document.getElementById("results-meta")
 results_wrap_el = document.getElementById("results-wrap")
@@ -323,10 +322,6 @@ def list_tables(_event=None) -> None:
         set_status(f"Could not list tables: {exc}", "error")
 
 
-def on_load_default_click(_event=None) -> None:
-    asyncio.create_task(load_default_script())
-
-
 def load_saved_queries() -> dict:
     raw = localStorage.getItem(SAVED_QUERIES_STORAGE_KEY)
     if not raw:
@@ -461,11 +456,9 @@ def delete_saved_query(_event=None) -> None:
 
 async def bootstrap() -> None:
     try:
-        load_default_btn.disabled = True
         list_tables_btn.disabled = True
         accuse_submit_btn.disabled = True
 
-        load_default_btn.addEventListener("click", load_default_proxy)
         list_tables_btn.addEventListener("click", list_tables_proxy)
         run_query_btn.addEventListener("click", run_query_proxy)
         reset_db_btn.addEventListener("click", reset_db_proxy)
@@ -478,9 +471,8 @@ async def bootstrap() -> None:
 
         refresh_saved_queries_select()
 
-        load_default_btn.disabled = False
         accuse_submit_btn.disabled = False
-        set_status(f"Python runtime is ready. Load {DEFAULT_SQL_PATH} to begin.", "ok")
+        await load_default_script()
     except Exception as exc:  # noqa: BLE001
         set_status(f"Startup failed: {exc}", "error")
 
@@ -491,7 +483,6 @@ def on_saved_queries_select_change(_event=None) -> None:
     delete_saved_query_btn.disabled = not has_selection
 
 
-load_default_proxy = create_proxy(on_load_default_click)
 list_tables_proxy = create_proxy(list_tables)
 run_query_proxy = create_proxy(run_query)
 reset_db_proxy = create_proxy(reset_db)
