@@ -8,8 +8,10 @@ each step. Canon rules players may legally rely on are called out in blockquotes
 
 ## Game canon (what players are told)
 
-> **Entry auto-attack** — entering any location immediately draws an attack from a beast
-> that roams there. The hit always lands in `damage_logs`.
+> **Guarded gates (entry auto-attack)** — every location is gated by its roaming beasts:
+> a location can only be entered **while its beasts are awake**, and entering always
+> draws the guard's attack. Every crossing between zones therefore leaves a hit in
+> `damage_logs`. When a location's beasts are asleep, its gate is shut — nobody gets in.
 
 > **Nightfall aggression** — when night falls on a location (its `sunset`), its nocturnal
 > beasts start hunting *everyone still present*. Nobody who stays past dark escapes a hit.
@@ -153,8 +155,11 @@ away afterwards changes nothing.
 
 ## Q7 — The tiebreaker: who fled?
 
-> Relies on **entry auto-attack**: whoever left Whisper Grove after the murder took a
-> fresh-zone beast hit somewhere else. The innocent suspect has no such row.
+> Relies on **guarded gates**: after the murder, every location except Moonlit Docks is
+> shut for the night (Ember Market and Shattered Arena beasts are diurnal and asleep,
+> and staying in Whisper Grove means more Grove hits). Moonlit Docks wakes at 20:00 —
+> the only gate still open. So anyone who shows a Docks-band hit after 19:07 crossed
+> zones after the kill; the innocent suspect has no such row.
 
 Narrow the table to the finalists:
 
@@ -168,16 +173,17 @@ Then look for flight:
 SELECT DISTINCT s.username
 FROM suspects AS s
 JOIN damage_logs AS dl ON dl.username = s.username
-WHERE dl.damage_taken BETWEEN 20 AND 28        -- any non-Grove beast band
+WHERE dl.damage_taken BETWEEN 20 AND 28        -- Docks signature: only zone enterable at night
   AND dl.damage_timestamp > '19:07';           -- ...after the murder
 ```
 
-**Outcome:** exactly one row-set match — **ShieldTotem**, hit for 21 by a Dockshade Eel
-at 20:12 (Moonlit Docks wakes at 20:00; a fresh-zone entry attack). SilentArrow's log
-shows Grove hits continuing to 19:34 — he stayed all night.
+**Outcome:** exactly one match — **ShieldTotem**, hit for 21 by a Dockshade Eel at 20:12
+(Moonlit Docks woke at 20:00; a fresh-zone entry attack). SilentArrow's log shows Grove
+hits continuing to 19:34 — he stayed all night, which under guarded gates is the *only*
+thing he could have done without leaving a trace.
 
-**Deduction:** ShieldTotem left the crime scene right after the kill. You can't outrun
-the beasts — the flight convicts him.
+**Deduction:** ShieldTotem passed through an open gate right after the kill. You can't
+outrun the beasts — the flight convicts him.
 
 ---
 
