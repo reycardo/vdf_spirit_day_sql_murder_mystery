@@ -139,4 +139,5 @@ INSERT INTO damage_logs (id, username, combat_id, damage_timestamp, damage_taken
   (128, 'ShadowProwler', 94, '20:33', 22),
   (129, 'NightStalker', 92, '20:34', 22),
   (130, 'SilentBlade', 86, '20:35', 24),
-  (131, 'NightStalker', 106, '20:38', 28);
+  (131, 'NightStalker', 106, '20:38', 28),
+  (132, 'ShieldTotem', 113, '20:12', 21);

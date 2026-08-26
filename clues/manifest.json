@@ -24,6 +24,11 @@
       "file": "auto_beast.jpg",
       "title": "Entering a new location",
       "description": "When entering a new location you are automatically attacked by a beast."
+    },
+    {
+      "file": "night_frenzy.jpg",
+      "title": "Night Frenzy",
+      "description": "When night falls on a location, the nocturnal beasts there begin hunting every player present. No one who remains through the night escapes being attacked."
     }
   ]
 }

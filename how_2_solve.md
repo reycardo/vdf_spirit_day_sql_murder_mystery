@@ -33,6 +33,15 @@ SELECT b.monster_name, p.place_name,
 FROM beastiary b JOIN places p ON p.place_name = b.place
 WHERE b.monster_name IN ('Nightmaw', 'Pitcoil Hound');
 
+-- Q5 final form: who was in Whisper Grove when xCalibur died?
+
+SELECT DISTINCT username
+FROM damage_logs
+WHERE damage_taken BETWEEN 11 AND 19            -- Nightmaw-only band at night
+  AND damage_timestamp BETWEEN '18:00' AND '19:07';  -- after Grove sunset, before/at death
+
+saved as suspects
+
 - cross check with classes that can equip those weapons
 
 SELECT

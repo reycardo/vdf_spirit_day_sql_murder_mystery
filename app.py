@@ -47,11 +47,11 @@ current_results_page = 0
 TABLE_DESCRIPTIONS = {
     "beastiary": "Monsters, their damage range, whether they're nocturnal, and where they roam.",
     "class_weapon_permissions": "Which weapons each class is allowed to equip.",
-    "classes": "Player classes and the bonus/penalty damage they add to a hit.",
+    "classes": "Player classes and the bonus damage they add to a hit.",
     "damage_logs": "Timestamped damage events taken by each player, grouped by combat_id per source.",
     "places": "In-game locations with their sunset/sunrise times.",
-    "player_overview": "Players, their class, currently equipped weapon, and its effect.",
-    "weapons": "Base weapons and their base damage.",}
+    "player_overview": "Players, their class and equipped weapon.",
+    "weapons": "Weapons and their base damage.",}
 
 
 def set_status(message: str, kind: str = "") -> None:
