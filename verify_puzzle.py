@@ -163,6 +163,24 @@ timeline_ok = (
 )
 check("7 victim timeline: five beast hits then the killing blow", timeline_ok)
 
+# Grove-at-death ∩ Docks-after must be a crowd that includes non-rogues, so the
+# Q6 rogue-capability step stays necessary (no flat "who was in the Docks" shortcut).
+dock_after = {
+    r[1]
+    for r in rows
+    if 20 <= r[4] <= 28 and r[3] > DEATH_TIME
+}
+intersection = pool & dock_after
+class_of = dict(
+    con.execute("SELECT username, class FROM player_overview")
+)
+non_rogue_visitors = [u for u in intersection if class_of.get(u) != "rogue"]
+check(
+    "8 Grove AND Docks includes non-rogues (Q6 stays necessary)",
+    len(intersection) >= 2 and len(non_rogue_visitors) >= 1,
+    f"intersection={sorted(intersection)} non-rogue={non_rogue_visitors}",
+)
+
 print()
 if failures:
     print(f"FAILED: {len(failures)} check(s): {failures}")

@@ -140,4 +140,15 @@ INSERT INTO damage_logs (id, username, combat_id, damage_timestamp, damage_taken
   (129, 'NightStalker', 92, '20:34', 22),
   (130, 'SilentBlade', 86, '20:35', 24),
   (131, 'NightStalker', 106, '20:38', 28),
-  (132, 'ShieldTotem', 113, '20:12', 21);
+  (132, 'ShieldTotem', 113, '20:12', 21),
+  (133, 'MoonPriest', 114, '20:05', 21),
+  (134, 'GromByte', 115, '20:07', 24),
+  (135, 'ShadowMend', 116, '20:09', 22),
+  (136, 'RuneTank', 117, '20:11', 23),
+  (137, 'FrostByte99', 118, '20:13', 26),
+  (138, 'WanderingSage', 119, '20:15', 20),
+  (139, 'QuietStorm', 120, '20:17', 25),
+  (140, 'CrimsonFang', 121, '20:21', 28),
+  (141, 'VelvetHex', 122, '20:24', 26),
+  (142, 'PixelPaladin', 123, '20:28', 27),
+  (143, 'TinyTitan', 124, '20:33', 28);

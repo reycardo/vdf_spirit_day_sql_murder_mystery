@@ -16,11 +16,6 @@
       "description": "Warning about equipping certain items"
     },
     {
-      "file": "nocturnal.jpg",
-      "title": "Monster Behavior",
-      "description": "Some monsters are nocturnal and only appear at night, while others are diurnal and only appear during the day."
-    },
-    {
       "file": "auto_beast.jpg",
       "title": "Entering a new location",
       "description": "When entering a new location you are automatically attacked by a beast."

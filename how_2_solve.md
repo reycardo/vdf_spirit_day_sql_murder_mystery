@@ -8,10 +8,10 @@ each step. Canon rules players may legally rely on are called out in blockquotes
 
 ## Game canon (what players are told)
 
-> **Guarded gates (entry auto-attack)** — every location is gated by its roaming beasts:
-> a location can only be entered **while its beasts are awake**, and entering always
-> draws the guard's attack. Every crossing between zones therefore leaves a hit in
-> `damage_logs`. When a location's beasts are asleep, its gate is shut — nobody gets in.
+> **Entry auto-attack** — entering a location draws an attack from any beast still awake
+> there, and the hit lands in `damage_logs`. A beast that is asleep won't notice you, so a
+> night-time crossing into a sleeping-beast zone (Ember Market, Shattered Arena) leaves no
+> trace. That asymmetry is what makes the witness statement in the intro necessary.
 
 > **Nightfall aggression** — when night falls on a location (its `sunset`), its nocturnal
 > beasts start hunting *everyone still present*. Nobody who stays past dark escapes a hit.
@@ -153,41 +153,48 @@ away afterwards changes nothing.
 
 ---
 
-## Q7 — The tiebreaker: who fled?
+## Q7 — Where did the killer go?
 
-> Relies on **guarded gates**: after the murder, every location except Moonlit Docks is
-> shut for the night (Ember Market and Shattered Arena beasts are diurnal and asleep,
-> and staying in Whisper Grove means more Grove hits). Moonlit Docks wakes at 20:00 —
-> the only gate still open. So anyone who shows a Docks-band hit after 19:07 crossed
-> zones after the kill; the innocent suspect has no such row.
+> The intro's witness provides the key: the killer's trail was stained with black marsh
+> muck, "the same filth that coats the lair of the Boglurker." Decode it:
+>
+> ```sql
+> SELECT place FROM beastiary WHERE monster_name = 'Boglurker';
+> ```
+>
+> → **Moonlit Docks**. Then **entry auto-attack + night frenzy** do the rest: anyone at the
+> Docks after it wakes at 20:00 is guaranteed a logged 20–28 band hit (nobody present can
+> avoid it), while a night-time escape to Ember Market or the Arena leaves **no trace**
+> (their beasts are asleep). So the Docks are the only *provable* destination — which is
+> exactly where the witness puts the killer.
 
-Narrow the table to the finalists:
-
-```sql
-DELETE FROM suspects WHERE username NOT IN ('ShieldTotem', 'SilentArrow');
-```
-
-Then look for flight:
+The two-zone intersection — provably in the Grove at death *and* in the Docks after:
 
 ```sql
 SELECT DISTINCT s.username
 FROM suspects AS s
 JOIN damage_logs AS dl ON dl.username = s.username
-WHERE dl.damage_taken BETWEEN 20 AND 28        -- Docks signature: only zone enterable at night
+WHERE dl.damage_taken BETWEEN 20 AND 28        -- Docks signature
   AND dl.damage_timestamp > '19:07';           -- ...after the murder
 ```
 
-**Outcome:** exactly one match — **ShieldTotem**, hit for 21 by a Dockshade Eel at 20:12
-(Moonlit Docks woke at 20:00; a fresh-zone entry attack). SilentArrow's log shows Grove
-hits continuing to 19:34 — he stayed all night, which under guarded gates is the *only*
-thing he could have done without leaving a trace.
+**Outcome:** a crowd, not a name — **12 players**: CrimsonFang, FrostByte99, GromByte,
+MoonPriest, PixelPaladin, QuietStorm, RuneTank, ShadowMend, TinyTitan, VelvetHex,
+WanderingSage **and ShieldTotem**. Plenty of innocent Grove survivors also went to the
+Docks that night, so the destination alone proves nothing.
 
-**Deduction:** ShieldTotem passed through an open gate right after the kill. You can't
-outrun the beasts — the flight convicts him.
+**Deduction:** this is why **Q6 is mandatory**. Intersect the crowd against who can deal
+34 — only the rogue can — and the non-rogue visitors (bards, warriors, mages) fall away,
+leaving **ShieldTotem**. Run it the other way (Q6 first to finalists, then Q7's Docks
+filter) and you get the same single name: neither step can be skipped.
+
+**Deduction (final):** ShieldTotem was in the Grove at 19:07, can land exactly 34, and is
+the only finalist whose log shows a Moonlit Docks strike after the kill — he fled the
+crime scene. You can't outrun the beasts; the flight convicts him.
 
 ---
 
 ## Solution
 
-**ShieldTotem** — rogue, dagger, present in Whisper Grove at 19:07, capable of exactly 34
-damage, and gone from the Grove within the hour.
+**ShieldTotem** — rogue, dagger, provably in Whisper Grove at 19:07, capable of exactly 34
+damage, and the only Grove suspect whose log places him in Moonlit Docks after the murder.
