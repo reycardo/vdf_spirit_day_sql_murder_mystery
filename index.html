@@ -4,6 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SQL Mystery Console</title>
+    <script>
+      (function () {
+        var stored = localStorage.getItem("sqlMysteryTheme");
+        var theme =
+          stored === "light" || stored === "dark"
+            ? stored
+            : window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light";
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -22,9 +34,34 @@
         <p class="kicker">Ricardo Lopes presents...</p>
         <div class="hero-head">
           <h1>Vodatone SQL <span>Murder Mystery</span> 13 Oct 2026</h1>
-          <button id="open-tutorial" class="btn btn-secondary tutorial-btn" type="button">
-            📖 How to play
-          </button>
+          <div class="hero-actions">
+            <div class="theme-toggle" role="group" aria-label="Color theme">
+              <span class="theme-toggle-thumb" aria-hidden="true"></span>
+              <button
+                id="theme-light"
+                class="theme-toggle-option"
+                type="button"
+                aria-pressed="true"
+                aria-label="Light mode"
+                title="Light mode"
+              >
+                ☀️
+              </button>
+              <button
+                id="theme-dark"
+                class="theme-toggle-option"
+                type="button"
+                aria-pressed="false"
+                aria-label="Dark mode"
+                title="Dark mode"
+              >
+                🌙
+              </button>
+            </div>
+            <button id="open-tutorial" class="btn btn-secondary tutorial-btn" type="button">
+              📖 How to play
+            </button>
+          </div>
         </div>
       </header>
 
@@ -196,6 +233,7 @@ ORDER BY combat_id desc, damage_timestamp desc;
       packages = ["sqlite3"]
     </py-config>
     <script type="module" src="clues.js"></script>
+    <script type="module" src="theme.js"></script>
     <script type="module" src="tutorial.js"></script>
     <script type="module" src="https://pyscript.net/releases/2025.5.1/core.js"></script>
     <script type="py" src="app.py"></script>
