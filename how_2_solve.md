@@ -167,6 +167,10 @@ away afterwards changes nothing.
 > avoid it), while a night-time escape to Ember Market or the Arena leaves **no trace**
 > (their beasts are asleep). So the Docks are the only *provable* destination — which is
 > exactly where the witness puts the killer.
+>
+> Note the witness detail also works if read literally — "attacked by a Boglurker" rather
+> than "fled past its lair": ShieldTotem's Docks strike is a Boglurker hit (23 damage),
+> so both interpretations point at the same place and the same name.
 
 The two-zone intersection — provably in the Grove at death *and* in the Docks after:
 
@@ -189,8 +193,9 @@ leaving **ShieldTotem**. Run it the other way (Q6 first to finalists, then Q7's 
 filter) and you get the same single name: neither step can be skipped.
 
 **Deduction (final):** ShieldTotem was in the Grove at 19:07, can land exactly 34, and is
-the only finalist whose log shows a Moonlit Docks strike after the kill — he fled the
-crime scene. You can't outrun the beasts; the flight convicts him.
+the only finalist whose log shows a Moonlit Docks strike after the kill — a Boglurker hit
+at 20:12, matching the witness's marsh-muck trail. He fled the crime scene. You can't
+outrun the beasts; the flight convicts him.
 
 ---
 
