@@ -22,7 +22,7 @@ SELECT DISTINCT monster_name, nocturnal, place
 FROM beastiary
 WHERE damage_min <= 11 AND damage_max >= 17;
 
-Exactly two candidates: Nightmaw (nocturnal) and Thornveil Bear (diurnal). Both rows say place = Whisper Grove — the place is already pinned, no matter which of the two it was.
+→ Nightmaw (nocturnal, Whisper Grove) and Pitcoil Hound (diurnal, Shattered Arena) — two monsters, two locations, no way to choose from ranges
 
 Q4 — Use nocturnal + sunset to pick the culprit (the step you wanted players forced into)
 
@@ -31,7 +31,7 @@ SELECT b.monster_name, p.place_name,
        WHEN b.nocturnal = 0 AND '19:07' <  p.sunset THEN 'ACTIVE'
        ELSE 'asleep' END AS status
 FROM beastiary b JOIN places p ON p.place_name = b.place
-WHERE b.monster_name IN ('Nightmaw', 'Thornveil Bear');
+WHERE b.monster_name IN ('Nightmaw', 'Pitcoil Hound');
 
 - cross check with classes that can equip those weapons
 
