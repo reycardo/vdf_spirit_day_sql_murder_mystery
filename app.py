@@ -36,8 +36,8 @@ VIEW_NAME_PATTERN = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
 
 # SHA-256 hash of the killer's name (casefolded) so the plaintext answer never
 # appears in the source. Regenerate with:
-#   python3 -c "import hashlib; print(hashlib.sha256('name here'.casefold().strip().encode()).hexdigest())"
-SOLUTION_NAME_HASH = "1fba807977380320acd45691819ff707bf9f26b030e39f4f21af22450a794cec"
+#   python3 -c "import hashlib; print(hashlib.sha256('ShieldTotem'.casefold().strip().encode()).hexdigest())"
+SOLUTION_NAME_HASH = "fed3cece4d570d07910929f3c103b8608da2c72b666642092f7bb0dab3d44a89"
 
 RESULTS_PAGE_SIZE = 50
 last_query_columns: list[str] = []
