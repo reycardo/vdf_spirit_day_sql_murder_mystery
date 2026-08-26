@@ -118,13 +118,27 @@ check(
     f"violations: {tripwire}" if tripwire else "",
 )
 
+# Broadened Q5 (bands 1-19) is only sound if no other place sharing those
+# bands stays awake past Grove sunset. Ember Market's day beasts own 1-10.
+low_band_sharers = [
+    m[4]
+    for m in monsters
+    if m[4] != GROVE and m[1] <= 10 and m[2] >= 1 and not m[3]
+]
+sound_low_bands = all(sunset[p] <= grove_sunset for p in low_band_sharers)
+check(
+    "6a low-band soundness (band sharers sleep by Grove sunset)",
+    sound_low_bands,
+    f"awake too long: {low_band_sharers}" if not sound_low_bands else "",
+)
+
 pool = {
     r[0]
     for r in con.execute(
         "SELECT DISTINCT username FROM damage_logs "
         "WHERE damage_taken BETWEEN ? AND ? "
         "AND damage_timestamp BETWEEN ? AND ?",
-        (11, 19, grove_sunset, DEATH_TIME),
+        (1, 19, grove_sunset, DEATH_TIME),
     )
 }
 expected_pool = EXPECTED_SUSPECTS | {VICTIM}

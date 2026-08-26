@@ -8,7 +8,7 @@ CREATE TABLE places (
 );
 
 INSERT INTO places (id, place_name, sunset, sunrise) VALUES
-  (1, 'Ember Market', '19:30', '06:00'),
+  (1, 'Ember Market', '18:00', '06:00'),
   (2, 'Moonlit Docks', '20:00', '05:00'),
   (3, 'Shattered Arena', '18:30', '06:00'),
   (4, 'Whisper Grove', '18:00', '06:00');
