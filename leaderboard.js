@@ -1,4 +1,4 @@
-const LEADERBOARD_URL = "PASTE_YOUR_APPS_SCRIPT_EXEC_URL_HERE";
+const LEADERBOARD_URL = "https://script.google.com/macros/s/AKfycbyBEXxPZpGjp4hhafCswwl7OFLus0rx0YcuCJxYZVuKSBaT6K8quq3N9RmpdCta66WA/exec";
 const EVENT_START = new Date("2026-10-13T15:00:00");
 const REFRESH_INTERVAL_MS = 60000;
 const MY_TEAM_STORAGE_KEY = "sqlMysteryMyTeam";
