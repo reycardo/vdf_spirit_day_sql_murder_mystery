@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SQL Mystery Console</title>
+    <script>
+      (function () {
+        var stored = localStorage.getItem("sqlMysteryTheme");
+        var theme =
+          stored === "light" || stored === "dark"
+            ? stored
+            : window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light";
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&family=Space+Grotesk:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://pyscript.net/releases/2025.5.1/core.css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+
+    <main class="app-shell">
+      <header class="hero">
+        <p class="kicker">Ricardo Lopes presents...</p>
+        <div class="hero-head">
+          <h1>Vodatone SQL <span>Murder Mystery</span> 13 Oct 2026</h1>
+          <div class="hero-actions">
+            <div class="theme-toggle" role="group" aria-label="Color theme">
+              <span class="theme-toggle-thumb" aria-hidden="true"></span>
+              <button
+                id="theme-light"
+                class="theme-toggle-option"
+                type="button"
+                aria-pressed="true"
+                aria-label="Light mode"
+                title="Light mode"
+              >
+                ☀️
+              </button>
+              <button
+                id="theme-dark"
+                class="theme-toggle-option"
+                type="button"
+                aria-pressed="false"
+                aria-label="Dark mode"
+                title="Dark mode"
+              >
+                🌙
+              </button>
+            </div>
+            <button id="open-tutorial" class="btn btn-secondary tutorial-btn" type="button">
+              📖 How to play
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <section class="panel intro-panel" aria-label="Case introduction">
+        <div class="intro-head">
+          <p class="kicker">The Case</p>
+          <h2>Introduction</h2>
+        </div>
+        <div class="intro-body">
+          <p class="intro-placeholder">
+            Vodatone CEO's son — <span class="highlight">Jimmy Jim</span> — was brutally murdered...<br><br>
+            ...inside "World of Vodacraft", caught off guard by another player while battling <span class="highlight">local beasts</span>. The killer then <span class="highlight">fled the crime scene toward a new location</span>.<br><br>
+            One witness did see something - the killer's escape trail ended at a new location slick with <span class="highlight">black marsh muck</span>, the unmistakable filth left behind only when brushing against the <span class="highlight">Boglurker</span>.<br><br>
+            Now Little Jimmy's been crying all week. It's up to you to figure out who did it.<br><br>
+            Everything you need is in this database - Click the <span class="highlight">list tables button</span> for more details.<br><br>            
+            I've attached a few <span class="highlight">Clues</span> in the Clues Folder Viewer and started a Query in the SQL Editor to help get you started.<br><br>
+            Find the killer.
+          </p>
+        </div>
+      </section>
+
+      <section class="panel controls-panel">
+        <div class="controls-row">
+          <button id="reset-db" class="btn btn-ghost" disabled>Reset DB</button>
+        </div>
+        <p id="status" class="status">Initializing Python runtime...</p>
+      </section>
+
+      <section class="panel editor-panel">
+        <div class="editor-head">
+          <h2>SQL Editor</h2>
+          <div class="editor-actions">
+            <button id="list-tables" class="btn btn-secondary" disabled>List Tables</button>
+            <button id="run-query" class="btn btn-primary" disabled>Run Query</button>
+          </div>
+        </div>
+        <textarea id="query-input" spellcheck="false" aria-label="SQL query input">
+SELECT * 
+FROM damage_logs
+where username = '???'
+ORDER BY combat_id desc, damage_timestamp desc;
+        </textarea>
+        <div class="saved-queries-row">
+          <input
+            id="saved-query-name"
+            type="text"
+            placeholder="Name this query..."
+            aria-label="Saved query name"
+          />
+          <button id="save-query" class="btn btn-secondary">Save Query</button>
+          <select id="saved-queries-select" aria-label="Saved queries">
+            <option value="">Saved queries...</option>
+          </select>
+          <button id="load-saved-query" class="btn btn-secondary" disabled>Load</button>
+          <button id="delete-saved-query" class="btn btn-ghost" disabled>Delete</button>
+        </div>
+      </section>
+
+      <section class="panel output-panel">
+        <h2>Results</h2>
+        <div id="results-meta" class="results-meta">No query executed yet.</div>
+        <div id="results-wrap" class="results-wrap"></div>
+      </section>
+
+      <section class="panel clues-panel" aria-label="Clues gallery">
+        <div class="clues-head">
+          <h2>Clues Folder Viewer</h2>
+          <p id="clues-counter" class="clues-counter">0 / 0</p>
+        </div>
+        <p id="clues-status" class="clues-status">Initializing clues...</p>
+        <figure class="clue-figure">
+          <img id="clues-image" class="clue-image is-empty" alt="No clue image loaded." />
+          <figcaption class="clue-caption">
+            <h3 id="clues-title">No clues available</h3>
+            <p id="clues-description">Add images to clues/ and list them in clues/manifest.json.</p>
+          </figcaption>
+        </figure>
+        <div class="clues-controls">
+          <button id="prev-clue" class="btn btn-ghost" disabled>Previous clue</button>
+          <button id="next-clue" class="btn btn-primary" disabled>Next clue</button>
+        </div>
+      </section>
+
+      <section class="panel accuse-panel" aria-label="Accuse the killer">
+        <h2>Name the Killer</h2>
+        <p class="accuse-subtitle">
+          Found enough evidence? Submit the name of whoever you believe was the perpetrator of such a crime.
+        </p>
+        <div class="accuse-row">
+          <input
+            id="accuse-input"
+            type="text"
+            placeholder="Enter suspect name..."
+            aria-label="Accused suspect name"
+          />
+          <button id="accuse-submit" class="btn btn-primary" disabled>Submit Accusation</button>
+        </div>
+        <p id="accuse-result" class="accuse-result" role="status"></p>
+      </section>
+
+      <section class="panel leaderboard-panel" aria-label="Winners board">
+        <div class="leaderboard-head">
+          <h2>Winners' Board</h2>
+          <p id="leaderboard-status" class="leaderboard-status">Loading winners...</p>
+        </div>
+        <div class="leaderboard-claim" id="leaderboard-claim" hidden>
+          <input
+            id="team-name-input"
+            type="text"
+            placeholder="Your team name..."
+            aria-label="Team name"
+            autocomplete="off"
+          />
+          <button id="claim-spot" class="btn btn-primary" type="button">Claim your spot</button>
+        </div>
+        <ol id="leaderboard-list" class="leaderboard-list"></ol>
+      </section>
+    </main>
+
+    <div id="tutorial-overlay" class="tutorial-overlay" hidden>
+      <div
+        class="tutorial-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="tutorial-title"
+      >
+        <div class="tutorial-head">
+          <h2 id="tutorial-title">How to use the SQL Mystery Console</h2>
+          <button id="close-tutorial" class="btn btn-ghost tutorial-close" aria-label="Close tutorial">
+            ✕
+          </button>
+        </div>
+        <div class="tutorial-body">
+          <section class="tutorial-step">
+            <h3>1. Run a query</h3>
+            <p>
+              Type a SQL statement in the editor and click <strong>Run Query</strong> (or use
+              <strong>List Tables</strong> to quickly see everything in the database). Results
+              appear in the panel below.
+            </p>
+          </section>
+          <section class="tutorial-step">
+            <h3>2. Save a query</h3>
+            <p>
+              Write a query, give it a name in the <strong>Name this query...</strong> field, then
+              click <strong>Save Query</strong>. Saved queries are stored in your browser
+              (localStorage) so they persist between visits.
+            </p>
+          </section>
+          <section class="tutorial-step">
+            <h3>3. Load a saved query</h3>
+            <p>
+              Pick a saved query from the <strong>Saved queries...</strong> dropdown, then click
+              <strong>Load</strong> to place it back in the editor. You can also click
+              <strong>Delete</strong> to remove a saved query you no longer need.
+            </p>
+          </section>
+          <section class="tutorial-step">
+            <h3>4. Reset the database</h3>
+            <p>
+              Click <strong>Reset DB</strong> to wipe all changes and reload the database fresh, in
+              case you want to start your investigation over.
+            </p>
+          </section>
+          <section class="tutorial-step">
+            <h3>5. Browse clues</h3>
+            <p>
+              Use <strong>Previous clue</strong> / <strong>Next clue</strong> (or the ←/→ arrow
+              keys) to page through evidence images in the Clues Folder Viewer.
+            </p>
+          </section>
+          <section class="tutorial-step">
+            <h3>6. Name the killer</h3>
+            <p>
+              Once you've pieced the clues together, type the suspect's name in the
+              <strong>Name the Killer</strong> section and click <strong>Submit Accusation</strong>.
+              You'll be told right away if you cracked the case or need to keep investigating.
+            </p>
+          </section>
+          <section class="tutorial-step">
+            <h3>7. Claim your spot</h3>
+            <p>
+              Crack the case and a claim box appears in the <strong>Winners' Board</strong> section.
+              Type your team name to appear on the live leaderboard.
+            </p>
+          </section>
+        </div>
+        <div class="tutorial-footer">
+          <button id="close-tutorial-footer" class="btn btn-primary">Got it</button>
+        </div>
+      </div>
+    </div>
+
+    <py-config>
+      packages = ["sqlite3"]
+    </py-config>
+    <script type="module" src="clues.js"></script>
+    <script type="module" src="theme.js"></script>
+    <script type="module" src="tutorial.js"></script>
+    <script type="module" src="leaderboard.js"></script>
+    <script type="module" src="https://pyscript.net/releases/2025.5.1/core.js"></script>
+    <script type="py" src="app.py"></script>
+  </body>
+</html>

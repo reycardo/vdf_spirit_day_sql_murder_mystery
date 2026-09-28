@@ -1,0 +1,29 @@
+{
+  "images": [
+    {
+      "file": "kid_crying.png",
+      "title": "Jimmy Jim crying",
+      "description": "The moment Jimmy Jim realized he was murdered."
+    },    
+    {
+      "file": "dmg_done.jpg",
+      "title": "Damage Calculation",
+      "description": "How to calculate damage done to a player"
+    },
+    {
+      "file": "equip_warning.jpg",
+      "title": "Equipment Warning",
+      "description": "Warning about equipping certain items"
+    },
+    {
+      "file": "auto_beast.jpg",
+      "title": "Entering a new location",
+      "description": "When entering a new location you are automatically attacked by a beast."
+    },
+    {
+      "file": "night_frenzy.jpg",
+      "title": "Night Frenzy",
+      "description": "When night falls on a location, the nocturnal beasts there begin hunting every player present. No one who remains through the night escapes being attacked."
+    }
+  ]
+}

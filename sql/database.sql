@@ -1,0 +1,10 @@
+-- Main database setup for AzerQuery Murder Mystery.
+-- Include files are resolved by app.py before executing SQL.
+
+-- @include tables/damage_logs.sql
+-- @include tables/player_overview.sql
+-- @include tables/beastiary.sql
+-- @include tables/weapons.sql
+-- @include tables/classes.sql
+-- @include tables/class_weapon_permissions.sql
+-- @include tables/places.sql
