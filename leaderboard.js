@@ -1,5 +1,5 @@
 const LEADERBOARD_URL = "https://script.google.com/macros/s/AKfycbyBEXxPZpGjp4hhafCswwl7OFLus0rx0YcuCJxYZVuKSBaT6K8quq3N9RmpdCta66WA/exec";
-const EVENT_START = new Date("2026-10-13T15:00:00");
+const EVENT_START = new Date("2026-10-13T11:00:00+01:00");
 const REFRESH_INTERVAL_MS = 60000;
 const MY_TEAM_STORAGE_KEY = "sqlMysteryMyTeam";
 const SOLVED_STORAGE_KEY = "sqlMysterySolved";
@@ -127,7 +127,7 @@ async function fetchBoard() {
 
   if (!boardOpen()) {
     leaderboardListEl.innerHTML = "";
-    setLeaderboardStatus("The Winners' Board opens at kickoff on 13 Oct, 15:00.");
+    setLeaderboardStatus("The Winners' Board opens at kickoff on 13 Oct, 11:00.");
     updateClaimVisibility();
     return;
   }
@@ -246,7 +246,7 @@ function handleSolved() {
   localStorage.setItem(SOLVED_STORAGE_KEY, "1");
   updateClaimVisibility();
   if (!boardOpen()) {
-    setLeaderboardStatus("Case closed! The Winners' Board opens at kickoff on 13 Oct, 15:00.");
+    setLeaderboardStatus("Case closed! The Winners' Board opens at kickoff on 13 Oct, 11:00.");
   } else if (isConfigured()) {
     setLeaderboardStatus("Case closed! Claim your team's spot on the Winners' Board.");
     leaderboardClaimEl.scrollIntoView({ behavior: "smooth", block: "center" });
